@@ -1,11 +1,16 @@
 import { useContext } from "react";
+
+import { DndContext, DragEndEvent, DragOverEvent, useSensors, useSensor, PointerSensor } from "@dnd-kit/core";
+import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
+
+import { TasksContext } from "./context/TasksContext";
+import { TaskStatus } from "./types";
+
 import Column from "./components/Column"
 import Header from "./components/Header"
 import TaskCard from "./components/TaskCard"
-import { TasksContext } from "./context/TasksContext";
-import { DndContext, DragEndEvent, DragOverEvent, useSensors, useSensor, PointerSensor } from "@dnd-kit/core";
-import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
-import { TaskStatus } from "./types";
+import AlertsPanel from "./components/AlertsPanel";
+import Footer from "./components/Footer";
 
 const columns = [
   { id: 'todo', title: 'To Do' },
@@ -78,44 +83,50 @@ function KanbanApp() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <DndContext 
-          sensors={sensors}
-          onDragOver={handleDragOver}
-          onDragEnd={handleDragEnd}
-        >
-          <div className="flex gap-6 pb-4">
-            {columns.map(column => (
-              <div key={column.id} id={column.id} className="flex-1">
-                <Column 
-                  title={column.title}
-                  droppableId={column.id}
+    <div className="h-screen bg-background flex flex-col">
+        <Header />
+        <div className="flex flex-1 min-h-0">
+            <div className="flex-1 p-8">
+                <DndContext 
+                    sensors={sensors}
+                    onDragOver={handleDragOver}
+                    onDragEnd={handleDragEnd}
                 >
-                  <SortableContext
-                    items={tasks.filter(task => task.status === column.id).map(t => t.id)}
-                    strategy={verticalListSortingStrategy}
-                  >
-                    {tasks
-                      .filter(task => task.status === column.id)
-                      .map((task) => (
-                        <TaskCard
-                          key={task.id}
-                          id={task.id}
-                          title={task.title}
-                          description={task.description}
-                        />
-                      ))}
-                  </SortableContext>
-                </Column>
-              </div>
-            ))}
-          </div>
-        </DndContext>
-      </main>
+                    <div className="flex gap-6 h-full">
+                        {columns.map(column => {
+                            const columnTasks = tasks.filter(task => task.status === column.id);
+                            return (
+                                <div key={column.id} id={column.id} className="flex-1">
+                                    <Column 
+                                        title={column.title}
+                                        droppableId={column.id}
+                                        count={columnTasks.length}
+                                    >
+                                        <SortableContext
+                                            items={columnTasks.map(t => t.id)}
+                                            strategy={verticalListSortingStrategy}
+                                        >
+                                            {columnTasks.map((task) => (
+                                                <TaskCard
+                                                    key={task.id}
+                                                    id={task.id}
+                                                    title={task.title}
+                                                    description={task.description}
+                                                />
+                                            ))}
+                                        </SortableContext>
+                                    </Column>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </DndContext>
+            </div>
+            <AlertsPanel/>
+        </div>
+        <Footer/>
     </div>
-  );
+);
 }
 
 export default KanbanApp
