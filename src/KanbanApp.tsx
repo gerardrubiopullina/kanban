@@ -1,6 +1,8 @@
+import { useContext } from "react";
 import Column from "./components/Column"
 import Header from "./components/Header"
 import TaskCard from "./components/TaskCard"
+import { TasksContext } from "./context/TasksContext";
 
 
 const columns = [
@@ -12,6 +14,12 @@ const columns = [
 
 function KanbanApp() {
 
+  const tasksContext = useContext(TasksContext);
+  if (!tasksContext) {
+    throw new Error('KanbanApp must be used within TasksProvider');
+  }
+  const { tasks } = tasksContext;
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -19,10 +27,15 @@ function KanbanApp() {
         <div className="flex gap-6 overflow-x-auto pb-4">
           {columns.map(column => (
             <Column key={column.id} title={column.title}>
-              <TaskCard 
-                title="Sample Task" 
-                description="Sample description for testing"
-              />
+              {tasks
+                .filter(task => task.status === column.id)
+                .map(task => (
+                  <TaskCard 
+                    key={task.id}
+                    title={task.title} 
+                    description={task.description}
+                  />
+              ))}
             </Column>
           ))}
         </div>
