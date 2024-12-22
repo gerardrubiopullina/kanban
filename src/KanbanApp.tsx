@@ -84,49 +84,49 @@ function KanbanApp() {
 
   return (
     <div className="h-screen bg-background flex flex-col">
-        <Header />
+      <Header />
         <div className="flex flex-1 min-h-0">
-            <div className="flex-1 p-8">
-                <DndContext 
-                    sensors={sensors}
-                    onDragOver={handleDragOver}
-                    onDragEnd={handleDragEnd}
-                >
-                    <div className="flex gap-6 h-full">
-                        {columns.map(column => {
-                            const columnTasks = tasks.filter(task => task.status === column.id);
-                            return (
-                                <div key={column.id} id={column.id} className="flex-1">
-                                    <Column 
-                                        title={column.title}
-                                        droppableId={column.id}
-                                        count={columnTasks.length}
-                                    >
-                                        <SortableContext
-                                            items={columnTasks.map(t => t.id)}
-                                            strategy={verticalListSortingStrategy}
-                                        >
-                                            {columnTasks.map((task) => (
-                                                <TaskCard
-                                                    key={task.id}
-                                                    id={task.id}
-                                                    title={task.title}
-                                                    description={task.description}
-                                                />
-                                            ))}
-                                        </SortableContext>
-                                    </Column>
-                                </div>
-                            );
-                        })}
-                    </div>
-                </DndContext>
-            </div>
-            <AlertsPanel/>
-        </div>
-        <Footer/>
+          <div className="flex-1 p-8">
+            <DndContext 
+              sensors={sensors}
+              onDragOver={handleDragOver}
+              onDragEnd={handleDragEnd}
+            >
+              <div className="flex gap-6 h-full">
+                {columns.map(column => {
+                    const columnTasks = tasks.filter(task => task.status === column.id);
+                    return (
+                      <div key={column.id} id={column.id} className="flex-1">
+                        <Column 
+                          title={column.title}
+                          droppableId={column.id}
+                          count={columnTasks.length}
+                        >
+                          <SortableContext
+                            items={columnTasks.map(t => t.id)}
+                            strategy={verticalListSortingStrategy}
+                          >
+                            {columnTasks.map((task) => (
+                                <TaskCard
+                                    key={task.id}
+                                    id={task.id}
+                                    title={task.title}
+                                    description={task.description}
+                                />
+                            ))}
+                          </SortableContext>
+                        </Column>
+                      </div>
+                    );
+                  })}
+              </div>
+            </DndContext>
+          </div>
+        <AlertsPanel/>
+      </div>
+      <Footer/>
     </div>
-);
+  );
 }
 
 export default KanbanApp
