@@ -20,7 +20,7 @@ const columns = [
 ];
 
 function KanbanApp() {
-
+  
   const tasksContext = useContext(TasksContext);
   if (!tasksContext) throw new Error('Tasks Context not found.');
 
@@ -38,23 +38,23 @@ function KanbanApp() {
     const { active, over } = event;
     if (!over) return;
     
-    const activeId = active.id;
-    const overId = over.id;
-    const activeTask = tasks.find(t => t.id === Number(activeId));
-    const overTask = tasks.find(t => t.id === Number(overId));
+    const activeId = active.id.toString();
+    const overId = over.id.toString();
+    const activeTask = tasks.find(t => t.id === activeId);
+    const overTask = tasks.find(t => t.id === overId);
 
     if (!activeTask) return;
 
-    //task over a different column from the original
-    if (over.data?.current?.type === 'column') {
+    // Task over a different column from the original
+    if (over.data.current?.type === 'column') {
       const newStatus = over.id as TaskStatus;
       if (activeTask.status !== newStatus) {
-        moveTask(Number(activeId), newStatus);
+        moveTask(activeId, newStatus);
       }
     }
-    //task over a different task
+    // Task over a different task
     else if (overTask && activeTask.status !== overTask.status) {
-      moveTask(Number(activeId), overTask.status);
+      moveTask(activeId, overTask.status);
     }
   };
 
@@ -62,13 +62,13 @@ function KanbanApp() {
     const { active, over } = event;
     if (!over) return;
 
-    const activeId = Number(active.id);
-    const overId = Number(over.id);
+    const activeId = active.id.toString();
+    const overId = over.id.toString();
     
     const activeTask = tasks.find(t => t.id === activeId);
     if (!activeTask) return;
 
-    if (over.data?.current?.type === 'column') {
+    if (over.data.current?.type === 'column') {
       const newStatus = over.id as TaskStatus;
       const targetStatusTasks = tasks.filter(t => t.status === newStatus);
       reorderTasks(activeId, newStatus, targetStatusTasks.length);
@@ -108,10 +108,10 @@ function KanbanApp() {
                           >
                             {columnTasks.map((task) => (
                                 <TaskCard
-                                    key={task.id}
-                                    id={task.id}
-                                    title={task.title}
-                                    description={task.description}
+                                  key={task.id}
+                                  id={task.id}
+                                  title={task.title}
+                                  description={task.description}
                                 />
                             ))}
                           </SortableContext>

@@ -1,12 +1,15 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { Google, Logout } from "@mui/icons-material";
 import { authService } from "../auth/authService";
+import { AuthContext } from "../context/AuthContext";
 
 interface AuthPopupProps {
     onClose: () => void;
 }
   
 export const AuthPopup = ({ onClose }: AuthPopupProps) => {
-
+    
+    const { user } = useContext(AuthContext);
     const [isLoading, setIsLoading] = useState(false);
   
     const handleGoogleSignIn = async () => {
@@ -22,22 +25,31 @@ export const AuthPopup = ({ onClose }: AuthPopupProps) => {
     };
   
     return (
-        <div className="absolute right-4 top-20 w-80 bg-primary/95 rounded-lg shadow-xl p-6 z-50">
-            <h2 className="text-lg font-semibold text-text-primary mb-4">Sign In</h2>
-            <button
-                onClick={handleGoogleSignIn}
-                disabled={isLoading}
-                className="w-full p-2 bg-accent text-primary rounded-lg font-medium flex items-center justify-center gap-2 hover:bg-accent/90 disabled:opacity-50"
-            >
-                <img src="https://www.google.com/favicon.ico" alt="Google" className="w-4 h-4" />
-                Continue with Google
-            </button>
-            <button 
-                onClick={onClose}
-                className="mt-4 text-text-secondary text-sm w-full text-center"
-            >
-                Cancel
-            </button>
+        <div className="absolute right-4 top-20 w-64 bg-primary/95 rounded-lg shadow-xl p-4 z-50">
+            {user ? (
+                <button
+                    onClick={() => {
+                        authService.signOut();
+                        onClose();
+                    }}
+                    className="w-full p-2 text-text-secondary hover:bg-primary/40 rounded-lg font-medium flex items-center gap-2 transition-colors"
+                >
+                    <Logout className="h-5 w-5" />
+                    Sign Out
+                </button>
+            ) : (
+                <>
+                    <h2 className="text-sm font-medium text-text-secondary mb-3">Sign in with</h2>
+                    <button
+                        onClick={handleGoogleSignIn}
+                        disabled={isLoading}
+                        className="w-full p-2 bg-accent/10 text-accent hover:bg-accent/20 rounded-lg font-medium flex items-center gap-2 transition-colors disabled:opacity-50"
+                    >
+                        <Google className="h-5 w-5" />
+                        Google
+                    </button>
+                </>
+            )}
         </div>
     );
 };
