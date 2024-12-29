@@ -5,7 +5,7 @@ const Footer = () => (
     <footer className="bg-primary border-t border-primary/30 h-12 shrink-0">
         <div className="h-full flex items-center justify-between px-20">
             <p className="text-sm text-text-secondary">
-                <span className="text-text-secondary/70">Kanban board Project by </span> 
+                <span className="text-text-secondary/70">Kanban Board project by </span> 
                 Gerard Rubió
             </p>
             <div className="flex gap-4">
