@@ -1,6 +1,9 @@
+import { useState, useRef } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { MoreVert } from "@mui/icons-material";
+import TaskOptions from "./Tasks/TaskOptions";
+
 
 interface TaskCardProps {
     id: string;
@@ -9,6 +12,10 @@ interface TaskCardProps {
 }
   
 const TaskCard = ({ id, title, description }: TaskCardProps) => {
+    const [showOptions, setShowOptions] = useState(false);
+    const [buttonPosition, setButtonPosition] = useState<{ x: number, y: number } | null>(null);
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    
     const {
         attributes,
         listeners,
@@ -20,6 +27,16 @@ const TaskCard = ({ id, title, description }: TaskCardProps) => {
     const style = {
         transform: CSS.Transform.toString(transform),
         transition
+    };
+
+    const handleOptionsClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        const button = buttonRef.current;
+        if (button) {
+            const rect = button.getBoundingClientRect();
+            setButtonPosition({ x: rect.right + 5, y: rect.top });
+        }
+        setShowOptions(!showOptions);
     };
 
     return (
@@ -34,8 +51,9 @@ const TaskCard = ({ id, title, description }: TaskCardProps) => {
                 <h4 className="text-text-primary font-medium">{title}</h4>
                 <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button 
+                        ref={buttonRef}
                         className="p-1 hover:bg-primary/40 rounded"
-                        onClick={(e) => e.stopPropagation()}
+                        onClick={handleOptionsClick}
                     >
                         <MoreVert className="h-3 w-3 text-text-secondary"/>
                     </button>
@@ -46,6 +64,7 @@ const TaskCard = ({ id, title, description }: TaskCardProps) => {
                     {description}
                 </p>
             )}
+            {showOptions && <TaskOptions onClose={() => setShowOptions(false)} buttonPosition={buttonPosition} />}
         </div>
     );
 };
