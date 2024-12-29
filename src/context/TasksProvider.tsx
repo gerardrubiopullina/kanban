@@ -1,42 +1,73 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { Task, TaskStatus } from "../types";
 import { TasksContext } from "./TasksContext";
-
+import { tasksService } from "../firebase/tasksService";
 
 export function TasksProvider({ children }: { children: ReactNode }) {
-    const [tasks, setTasks] = useState<Task[]>([
-        { id: 1, title: "Implement User Authentication", description: "Set up Firebase auth", status: "todo" },
-        { id: 2, title: "Design System Documentation", description: "Create docs for components", status: "todo" },
-        { id: 3, title: "API Integration", description: "Connect frontend with backend", status: "inProgress" },
-    ]);
+    
+    const [tasks, setTasks] = useState<Task[]>([]);
 
-    const addTask = (title: string, description?: string) => {
-        const newId = Math.max(0, ...tasks.map(t => t.id)) + 1;
-        setTasks([...tasks, { id: newId, title, description, status: 'todo' }]);
+    useEffect(() => {
+        const loadTasks = async () => {
+            try {
+                const fetchedTasks = await tasksService.getTasks();
+                setTasks(fetchedTasks);
+            } catch (error) {
+                console.error('Failed to load tasks:', error);
+            }
+        };
+
+        loadTasks();
+    }, []);
+
+    const addTask = async (title: string, description?: string) => {
+        const newTask = {
+            title,
+            description,
+            status: 'todo' as TaskStatus
+        };
+
+        try {
+            const id = await tasksService.addTask(newTask);
+            setTasks(prev => [...prev, { ...newTask, id }]);
+        } catch (error) {
+            console.error('Failed to add task:', error);
+        }
     };
 
-    const moveTask = (taskId: number, newStatus: TaskStatus) => {
-        setTasks(tasks.map(task => 
-            task.id === taskId 
-                ? { ...task, status: newStatus }
-                : task
-        ));
+    const moveTask = async (taskId: string, newStatus: TaskStatus) => {
+        try {
+            await tasksService.updateTask(taskId, { status: newStatus });
+            setTasks(tasks.map(task =>
+                task.id === taskId
+                    ? { ...task, status: newStatus }
+                    : task
+            ));
+        } catch (error) {
+            console.error('Failed to move task:', error);
+        }
     };
 
-    const reorderTasks = (taskId: number, newStatus: TaskStatus, newIndex: number) => {
+    const reorderTasks = async (taskId: string, newStatus: TaskStatus, newIndex: number) => {
         const taskToMove = tasks.find(t => t.id === taskId);
         if (!taskToMove) return;
 
-        const newTasks = tasks.filter(t => t.id !== taskId);
-        const targetStatusTasks = newTasks.filter(t => t.status === newStatus);
-        
-        taskToMove.status = newStatus;
-        targetStatusTasks.splice(newIndex, 0, taskToMove);
-        
-        setTasks([
-            ...newTasks.filter(t => t.status !== newStatus),
-            ...targetStatusTasks
-        ]);
+        try {
+            await tasksService.updateTask(taskId, { status: newStatus });
+            
+            const newTasks = tasks.filter(t => t.id !== taskId);
+            const targetStatusTasks = newTasks.filter(t => t.status === newStatus);
+            
+            taskToMove.status = newStatus;
+            targetStatusTasks.splice(newIndex, 0, taskToMove);
+            
+            setTasks([
+                ...newTasks.filter(t => t.status !== newStatus),
+                ...targetStatusTasks
+            ]);
+        } catch (error) {
+            console.error('Failed to reorder task:', error);
+        }
     };
 
     return (
