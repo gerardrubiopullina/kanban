@@ -12,6 +12,7 @@ interface TaskCardProps {
 }
   
 const TaskCard = ({ id, title, description }: TaskCardProps) => {
+
     const [showOptions, setShowOptions] = useState(false);
     const [buttonPosition, setButtonPosition] = useState<{ x: number, y: number } | null>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
@@ -64,7 +65,15 @@ const TaskCard = ({ id, title, description }: TaskCardProps) => {
                     {description}
                 </p>
             )}
-            {showOptions && <TaskOptions onClose={() => setShowOptions(false)} buttonPosition={buttonPosition} />}
+            {showOptions && (
+                <TaskOptions 
+                    onClose={() => setShowOptions(false)}
+                    buttonPosition={buttonPosition}
+                    taskId={id}
+                    taskTitle={title}
+                    taskDescription={description}
+                />
+            )}
         </div>
     );
 };

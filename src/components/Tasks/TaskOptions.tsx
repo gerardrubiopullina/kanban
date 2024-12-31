@@ -1,12 +1,24 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Edit, Delete } from "@mui/icons-material";
+import EditTaskForm from './EditTaskForm';
 
 interface TaskOptionsProps {
     onClose: () => void;
     buttonPosition: { x: number, y: number } | null;
+    taskId: string;
+    taskTitle: string;
+    taskDescription?: string;
 }
 
-const TaskOptions = ({ onClose, buttonPosition }: TaskOptionsProps) => {
+const TaskOptions = ({ 
+    onClose, 
+    buttonPosition,
+    taskId,
+    taskTitle,
+    taskDescription
+}: TaskOptionsProps) => {
+
+    const [showEditForm, setShowEditForm] = useState(false);
     const optionsRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -22,6 +34,20 @@ const TaskOptions = ({ onClose, buttonPosition }: TaskOptionsProps) => {
 
     if (!buttonPosition) return null;
 
+    if (showEditForm) {
+        return (
+            <EditTaskForm
+                taskId={taskId}
+                initialTitle={taskTitle}
+                initialDescription={taskDescription}
+                onClose={() => {
+                    setShowEditForm(false);
+                    onClose();
+                }}
+            />
+        );
+    }
+
     return (
         <div 
             ref={optionsRef}
@@ -34,10 +60,7 @@ const TaskOptions = ({ onClose, buttonPosition }: TaskOptionsProps) => {
                 shadow-xl overflow-hidden z-50 border border-primary/30"
             >
             <button
-                onClick={() => {
-                    console.log('Edit clicked');
-                    onClose();
-                }}
+                onClick={() => setShowEditForm(true)}
                 className="p-2 text-text-primary hover:bg-primary/30 transition-colors rounded-md"
             >
                 <Edit className="h-4 w-4" />
