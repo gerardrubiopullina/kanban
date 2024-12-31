@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { TasksContext } from "../../context/TasksContext";
 
 
@@ -7,6 +7,8 @@ const NewTaskForm = ({ onClose }: { onClose: () => void }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
   
   const tasksContext = useContext(TasksContext);
   if (!tasksContext) throw new Error('Tasks Context not found');
@@ -28,6 +30,13 @@ const NewTaskForm = ({ onClose }: { onClose: () => void }) => {
     }
   };
 
+  const handleTitleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      descriptionRef.current?.focus();
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
       <div className="bg-background w-[550px] rounded-xl shadow-2xl">
@@ -40,17 +49,20 @@ const NewTaskForm = ({ onClose }: { onClose: () => void }) => {
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
+                onKeyDown={handleTitleKeyDown}
                 className="w-full px-0 py-2 bg-transparent border-b-2 border-primary/30 text-text-primary placeholder:text-text-secondary/50 text-lg outline-none focus:border-accent transition-colors"
                 placeholder="Task title"
                 required
+                autoFocus
               />
             </div>
             
             <div>
               <textarea
+                ref={descriptionRef}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="w-full px-4 py-3 bg-primary/10 rounded-xl text-text-primary placeholder:text-text-secondary/50 outline-none min-h-[180px] resize-none text-base"
+                className="w-full px-4 py-3 bg-primary/10 rounded-xl text-text-primary placeholder:text-text-secondary/50 outline-none min-h-[180px] resize-none text-base whitespace-pre-wrap"
                 placeholder="Add description..."
               />
             </div>

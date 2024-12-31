@@ -40,6 +40,21 @@ const TaskCard = ({ id, title, description }: TaskCardProps) => {
         setShowOptions(!showOptions);
     };
 
+    //ux styling 
+    const formatDescription = (text: string) => {
+        return text.split('\n').map((line, i) => {
+            //lists
+            if (line.startsWith('- ')) {
+                return (
+                    <li key={i} className="ml-4">
+                        {line.substring(2)}
+                    </li>
+                );
+            }
+            return <p key={i}>{line}</p>;
+        });
+    };
+
     return (
         <div
             ref={setNodeRef}
@@ -62,7 +77,7 @@ const TaskCard = ({ id, title, description }: TaskCardProps) => {
             </div>
             {description && (
                 <p className="text-text-secondary text-sm mt-2">
-                    {description}
+                    {formatDescription(description)}
                 </p>
             )}
             {showOptions && (
