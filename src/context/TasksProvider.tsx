@@ -93,6 +93,17 @@ export function TasksProvider({ children }: { children: ReactNode }) {
         }
     }
 
+    const deleteCompletedTasks = async() => {
+        try {
+            const completedTasks = tasks.filter(task => task.status === 'done');
+            await Promise.all(completedTasks.map(task => tasksService.deleteTask(task.id)));
+            setTasks(tasks.filter(task => task.status !== 'done'));
+        } catch (error) {
+            console.error('Failed to delete completed tasks:', error);
+            throw error;
+        }
+    }
+
     return (
         <TasksContext.Provider 
             value={{ 
@@ -101,7 +112,8 @@ export function TasksProvider({ children }: { children: ReactNode }) {
                 moveTask, 
                 reorderTasks,
                 updateTask,
-                deleteTask
+                deleteTask,
+                deleteCompletedTasks
             }}
         >
             {children}

@@ -8,6 +8,7 @@ interface TasksContextType {
     reorderTasks: (taskId: string, newStatus: TaskStatus, newIndex: number) => void;
     updateTask: (taskId: string, title: string, description?: string) => void;
     deleteTask: (taskId: string) => Promise<void>;
+    deleteCompletedTasks: () => Promise<void>;
 }
 
 export const TasksContext = createContext<TasksContextType | undefined>(undefined);

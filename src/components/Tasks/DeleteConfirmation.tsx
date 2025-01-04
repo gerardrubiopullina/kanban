@@ -2,12 +2,13 @@ import { useContext, useState } from 'react';
 import { TasksContext } from '../../context/TasksContext';
 
 interface DeleteConfirmationProps {
-  taskId: string;
-  taskTitle: string;
-  onClose: () => void;
+    taskId: string;
+    taskTitle: string;
+    onClose: () => void;
+    customDeleteHandler?: () => Promise<void>;
 }
 
-const DeleteConfirmation = ({ taskId, taskTitle, onClose }: DeleteConfirmationProps) => {
+const DeleteConfirmation = ({ taskId, taskTitle, onClose, customDeleteHandler }: DeleteConfirmationProps) => {
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -21,8 +22,12 @@ const DeleteConfirmation = ({ taskId, taskTitle, onClose }: DeleteConfirmationPr
         setIsLoading(true);
         setError(null);
         try {
-            await deleteTask(taskId);
-            // console.log('Task deleted successfully:', taskId);
+            if (customDeleteHandler) {
+                //handle delete all done tasks
+                await customDeleteHandler();
+            } else {
+                await deleteTask(taskId);
+            }
             onClose();
         } catch (err) {
             const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';

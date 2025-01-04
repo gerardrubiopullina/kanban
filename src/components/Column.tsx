@@ -1,8 +1,12 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useContext, useState } from "react";
 import { useDroppable } from "@dnd-kit/core";
 import { Add, DeleteSweep } from "@mui/icons-material";
+
+import { TasksContext } from "../context/TasksContext";
+
 import NewTaskButton from "./Tasks/NewTaskButton";
 import NewTaskForm from "./Tasks/NewTaskForm";
+import DeleteConfirmation from "./Tasks/DeleteConfirmation";
 
 interface ColumnProps {
     title: string;
@@ -14,12 +18,27 @@ interface ColumnProps {
 const Column = ({ title, droppableId, children, count }: ColumnProps) => {
 
     const [showModal, setShowModal] = useState(false);
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+
     const { setNodeRef } = useDroppable({
         id: droppableId,
         data: {
             type: 'column'
         }
     });
+
+    const tasksContext = useContext(TasksContext);
+    if (!tasksContext) throw new Error('Tasks Context not found');
+    const { deleteCompletedTasks } = tasksContext;
+
+    const handleDeleteCompleted = async () => {
+        try {
+            await deleteCompletedTasks();
+            setShowDeleteConfirmation(false);
+        } catch (error) {
+            console.error('Failed to delete completed tasks:', error);
+        }
+    };
 
     return (
         <div 
@@ -37,7 +56,12 @@ const Column = ({ title, droppableId, children, count }: ColumnProps) => {
                         {count}
                     </span>
                     {droppableId === 'done' && count > 0 &&
-                        <DeleteSweep className="text-text-secondary cursor-pointer"/>
+                        <button
+                            onClick={() => setShowDeleteConfirmation(true)}
+                            className="text-text-secondary hover:text-text-primary transition-colors"
+                        >
+                            <DeleteSweep/>
+                        </button>
                     }
                 </div>
             </div>
@@ -57,7 +81,17 @@ const Column = ({ title, droppableId, children, count }: ColumnProps) => {
                     </div>
                 )}
             </div>
+
             {showModal && <NewTaskForm onClose={() => setShowModal(false)} />}
+
+            {showDeleteConfirmation && (
+                <DeleteConfirmation
+                    taskId="completed"
+                    taskTitle="all completed tasks"
+                    onClose={() => setShowDeleteConfirmation(false)}
+                    customDeleteHandler={handleDeleteCompleted}
+                />
+            )}
         </div>
     );
 };
