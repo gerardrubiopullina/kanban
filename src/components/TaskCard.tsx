@@ -77,9 +77,9 @@ const TaskCard = ({ id, title, description }: TaskCardProps) => {
                 </div>
             </div>
             {description && (
-                <p className="text-text-secondary text-sm mt-2">
+                <div className="text-text-secondary text-sm mt-2">
                     {formatDescription(description)}
-                </p>
+                </div>
             )}
             {showOptions && (
                 <TaskOptions 

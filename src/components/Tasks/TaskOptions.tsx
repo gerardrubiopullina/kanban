@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Edit, Delete } from "@mui/icons-material";
 import EditTaskForm from './EditTaskForm';
+import DeleteConfirmation from './DeleteConfirmation';
 
 interface TaskOptionsProps {
     onClose: () => void;
@@ -19,17 +20,26 @@ const TaskOptions = ({
 }: TaskOptionsProps) => {
 
     const [showEditForm, setShowEditForm] = useState(false);
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
     const optionsRef = useRef<HTMLDivElement>(null);
+    const deleteDialogRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (optionsRef.current && !optionsRef.current.contains(event.target as Node)) {
-                onClose();
+            //don't close if clicking inside options menu or delete confirmation
+            if (
+                (optionsRef.current && optionsRef.current.contains(event.target as Node)) ||
+                (deleteDialogRef.current && deleteDialogRef.current.contains(event.target as Node))
+            ) {
+                return;
             }
+            onClose();
         };
-
         document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
     }, [onClose]);
 
     if (!buttonPosition) return null;
@@ -49,6 +59,7 @@ const TaskOptions = ({
     }
 
     return (
+        <>
         <div 
             ref={optionsRef}
             style={{
@@ -66,15 +77,28 @@ const TaskOptions = ({
                 <Edit className="h-4 w-4" />
             </button>
             <button
-                onClick={() => {
-                    console.log('Delete clicked');
-                    onClose();
-                }}
+                onClick={() => setShowDeleteDialog(true)}
                 className="p-2 text-text-primary hover:bg-primary/30 transition-colors rounded-md"
             >
                 <Delete className="h-4 w-4" />
             </button>
         </div>
+
+        {
+            showDeleteDialog && (
+                <div ref={deleteDialogRef}>
+                    <DeleteConfirmation
+                        taskId={taskId}
+                        taskTitle={taskTitle}
+                        onClose={() => {
+                            setShowDeleteDialog(false);
+                            onClose();
+                        }}
+                    />
+                </div>
+            )
+        }
+        </>
     );
 };
 

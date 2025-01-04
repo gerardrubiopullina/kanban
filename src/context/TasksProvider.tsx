@@ -83,6 +83,16 @@ export function TasksProvider({ children }: { children: ReactNode }) {
         }
     }
 
+    const deleteTask = async(taskId: string) => {
+        try {
+            await tasksService.deleteTask(taskId);
+            setTasks(tasks.filter(task => task.id !== taskId));
+        } catch (error) {
+            console.error('Failed to delete task:', error)
+            throw error;
+        }
+    }
+
     return (
         <TasksContext.Provider 
             value={{ 
@@ -90,7 +100,8 @@ export function TasksProvider({ children }: { children: ReactNode }) {
                 addTask, 
                 moveTask, 
                 reorderTasks,
-                updateTask
+                updateTask,
+                deleteTask
             }}
         >
             {children}
