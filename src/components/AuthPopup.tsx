@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { Google, Logout } from "@mui/icons-material";
+import { Google, Logout, Settings } from "@mui/icons-material";
 import { authService } from "../auth/authService";
 import { AuthContext } from "../context/AuthContext";
 
@@ -27,16 +27,28 @@ export const AuthPopup = ({ onClose }: AuthPopupProps) => {
     return (
         <div className="absolute right-4 top-20 w-64 bg-primary/95 rounded-lg shadow-xl p-4 z-50">
             {user ? (
-                <button
-                    onClick={() => {
-                        authService.signOut();
-                        onClose();
-                    }}
-                    className="w-full p-2 text-text-secondary hover:bg-primary/40 rounded-lg font-medium flex items-center gap-2 transition-colors"
-                >
-                    <Logout className="h-5 w-5" />
-                    Sign Out
-                </button>
+                <div className="flex flex-col">
+                    <button
+                        onClick={() => {
+                            onClose();
+                        }}
+                        className="w-full p-2 text-text-secondary hover:bg-primary/40 rounded-lg font-medium flex items-center gap-2 transition-colors"
+                    >
+                        <Settings className="h-5 w-5" />
+                        Settings
+                    </button>
+                    <div className="my-2 border-t border-text-primary/30"></div>
+                    <button
+                        onClick={() => {
+                            authService.signOut();
+                            onClose();
+                        }}
+                        className="w-full p-2 text-text-secondary hover:bg-primary/40 rounded-lg font-medium flex items-center gap-2 transition-colors"
+                    >
+                        <Logout className="h-5 w-5" />
+                        Sign Out
+                    </button>
+                </div>
             ) : (
                 <>
                     <h2 className="text-sm font-medium text-text-secondary mb-3">Sign in with</h2>

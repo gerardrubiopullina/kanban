@@ -20,7 +20,7 @@ export function TasksProvider({ children }: { children: ReactNode }) {
         loadTasks();
     }, []);
 
-    const addTask = async (title: string, description?: string) => {
+    const addTask = async(title: string, description?: string) => {
         const newTask = {
             title,
             description,
@@ -35,7 +35,7 @@ export function TasksProvider({ children }: { children: ReactNode }) {
         }
     };
 
-    const moveTask = async (taskId: string, newStatus: TaskStatus) => {
+    const moveTask = async(taskId: string, newStatus: TaskStatus) => {
         try {
             await tasksService.updateTask(taskId, { status: newStatus });
             setTasks(tasks.map(task =>
@@ -48,7 +48,7 @@ export function TasksProvider({ children }: { children: ReactNode }) {
         }
     };
 
-    const reorderTasks = async (taskId: string, newStatus: TaskStatus, newIndex: number) => {
+    const reorderTasks = async(taskId: string, newStatus: TaskStatus, newIndex: number) => {
         const taskToMove = tasks.find(t => t.id === taskId);
         if (!taskToMove) return;
 
@@ -70,8 +70,52 @@ export function TasksProvider({ children }: { children: ReactNode }) {
         }
     };
 
+    const updateTask = async(taskId: string, title: string, description?: string) => {
+        try {
+            await tasksService.updateTask(taskId, {title, description});
+            setTasks(tasks.map(task =>
+                task.id === taskId
+                    ? {...task, title, description}
+                    : task
+            ));
+        } catch (error) {
+            console.log('Failed to update task:', error);
+        }
+    }
+
+    const deleteTask = async(taskId: string) => {
+        try {
+            await tasksService.deleteTask(taskId);
+            setTasks(tasks.filter(task => task.id !== taskId));
+        } catch (error) {
+            console.error('Failed to delete task:', error)
+            throw error;
+        }
+    }
+
+    const deleteCompletedTasks = async() => {
+        try {
+            const completedTasks = tasks.filter(task => task.status === 'done');
+            await Promise.all(completedTasks.map(task => tasksService.deleteTask(task.id)));
+            setTasks(tasks.filter(task => task.status !== 'done'));
+        } catch (error) {
+            console.error('Failed to delete completed tasks:', error);
+            throw error;
+        }
+    }
+
     return (
-        <TasksContext.Provider value={{ tasks, addTask, moveTask, reorderTasks }}>
+        <TasksContext.Provider 
+            value={{ 
+                tasks, 
+                addTask, 
+                moveTask, 
+                reorderTasks,
+                updateTask,
+                deleteTask,
+                deleteCompletedTasks
+            }}
+        >
             {children}
         </TasksContext.Provider>
     );
