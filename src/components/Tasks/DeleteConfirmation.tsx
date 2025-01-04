@@ -9,7 +9,6 @@ interface DeleteConfirmationProps {
 }
 
 const DeleteConfirmation = ({ taskId, taskTitle, onClose, customDeleteHandler }: DeleteConfirmationProps) => {
-
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -23,7 +22,6 @@ const DeleteConfirmation = ({ taskId, taskTitle, onClose, customDeleteHandler }:
         setError(null);
         try {
             if (customDeleteHandler) {
-                //handle delete all done tasks
                 await customDeleteHandler();
             } else {
                 await deleteTask(taskId);
@@ -31,7 +29,7 @@ const DeleteConfirmation = ({ taskId, taskTitle, onClose, customDeleteHandler }:
             onClose();
         } catch (err) {
             const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
-            console.error('Failed to delete task:', err);
+            console.error('Failed to delete task(s):', err);
             setError(errorMessage);
             setIsLoading(false);
         }
@@ -41,10 +39,23 @@ const DeleteConfirmation = ({ taskId, taskTitle, onClose, customDeleteHandler }:
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
             <div className="bg-background w-[400px] rounded-xl shadow-2xl">
                 <div className="p-8">
-                    <h2 className="text-2xl font-semibold text-text-primary mb-4">Delete Task</h2>
-                    <p className="text-text-secondary mb-8">
-                        Are you sure you want to delete "{taskTitle}"? This action cannot be undone.
-                    </p>
+                    <h2 className="text-2xl font-semibold text-text-primary mb-4">
+                        {taskId === 'completed' ? 'Clear Completed Tasks' : 'Delete Task'}
+                    </h2>
+                    {taskId === 'completed' ? (
+                        <p className="text-text-secondary mb-8">
+                            Are you sure you want to remove 
+                            <span className='font-bold text-lg'> all completed tasks</span>
+                            ? This action cannot be undone.
+                        </p>
+                    ) : (
+                        <div className="mb-8">
+                            <p className="text-text-secondary mb-3">
+                                Are you sure you want to delete this task? This action cannot be undone.
+                            </p>
+                            <span className="text-text-primary font-medium">{taskTitle}</span>
+                        </div>
+                    )}
                     {error && (
                         <p className="text-red-500 mb-4">
                             Error: {error}
