@@ -15,6 +15,7 @@ const TaskCard = ({ id, title, description }: TaskCardProps) => {
 
     const [showOptions, setShowOptions] = useState(false);
     const [buttonPosition, setButtonPosition] = useState<{ x: number, y: number } | null>(null);
+
     const buttonRef = useRef<HTMLButtonElement>(null);
     
     const {
@@ -26,7 +27,7 @@ const TaskCard = ({ id, title, description }: TaskCardProps) => {
     } = useSortable({ id });
 
     const style = {
-        transform: CSS.Transform.toString(transform),
+        transform: CSS.Translate.toString(transform),
         transition
     };
 
