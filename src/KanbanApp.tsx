@@ -1,58 +1,73 @@
-import { useContext } from "react";
-
-import { DndContext, DragEndEvent, DragOverEvent, useSensors, useSensor, PointerSensor } from "@dnd-kit/core";
-import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { useContext, useState } from "react";
+import {
+  DndContext,
+  DragEndEvent,
+  DragOverEvent,
+  DragStartEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragOverlay,
+} from "@dnd-kit/core";
+import { SortableContext } from "@dnd-kit/sortable";
 
 import { TasksContext } from "./context/TasksContext";
 import { TaskStatus } from "./types";
 
-import Column from "./components/Column"
-import Header from "./components/Header"
-import TaskCard from "./components/TaskCard"
+import Column from "./components/Column";
+import Header from "./components/Header";
+import TaskCard from "./components/TaskCard";
 import AlertsPanel from "./components/AlertsPanel";
 import Footer from "./components/Footer";
 
-const columns = [
-  { id: 'todo', title: 'To Do' },
-  { id: 'inProgress', title: 'In Progress' },
-  { id: 'reviewing', title: 'Reviewing' },
-  { id: 'done', title: 'Done' }
+const columns: { id: TaskStatus; title: string }[] = [
+  { id: "todo", title: "To Do" },
+  { id: "inProgress", title: "In Progress" },
+  { id: "reviewing", title: "Reviewing" },
+  { id: "done", title: "Done" },
 ];
 
 function KanbanApp() {
-  
+
   const tasksContext = useContext(TasksContext);
-  if (!tasksContext) throw new Error('Tasks Context not found.');
+  if (!tasksContext) throw new Error("Tasks Context not found.");
 
   const { tasks, moveTask, reorderTasks } = tasksContext;
-  
+  const [activeId, setActiveId] = useState<string | null>(null);
+
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 10
+        distance: 8, //distance before drag starts
       },
     })
   );
 
+  const handleDragStart = ({ active }: DragStartEvent) => {
+    setActiveId(active.id.toString());
+  };
+
   const handleDragOver = (event: DragOverEvent) => {
+
     const { active, over } = event;
     if (!over) return;
-    
+
     const activeId = active.id.toString();
     const overId = over.id.toString();
-    const activeTask = tasks.find(t => t.id === activeId);
-    const overTask = tasks.find(t => t.id === overId);
+
+    const activeTask = tasks.find((t) => t.id === activeId);
+    const overTask = tasks.find((t) => t.id === overId);
 
     if (!activeTask) return;
 
-    // Task over a different column from the original
-    if (over.data.current?.type === 'column') {
+    //dropping over a column
+    if (over.data.current?.type === "column") {
       const newStatus = over.id as TaskStatus;
       if (activeTask.status !== newStatus) {
         moveTask(activeId, newStatus);
       }
     }
-    // Task over a different task
+    //dropping over another task
     else if (overTask && activeTask.status !== overTask.status) {
       moveTask(activeId, overTask.status);
     }
@@ -60,73 +75,96 @@ function KanbanApp() {
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-    if (!over) return;
+    if (!over) {
+      setActiveId(null);
+      return;
+    }
 
     const activeId = active.id.toString();
     const overId = over.id.toString();
-    
-    const activeTask = tasks.find(t => t.id === activeId);
-    if (!activeTask) return;
 
-    if (over.data.current?.type === 'column') {
+    const activeTask = tasks.find((t) => t.id === activeId);
+    if (!activeTask) {
+      setActiveId(null);
+      return;
+    }
+
+    if (over.data.current?.type === "column") {
       const newStatus = over.id as TaskStatus;
-      const targetStatusTasks = tasks.filter(t => t.status === newStatus);
+      const targetStatusTasks = tasks.filter((t) => t.status === newStatus);
       reorderTasks(activeId, newStatus, targetStatusTasks.length);
-    } else {
-      const overTask = tasks.find(t => t.id === overId);
-      if (!overTask) return;
+    } 
+    //reordering column or moving to a new position in another column
+    else {
+      const overTask = tasks.find((t) => t.id === overId);
+      if (!overTask) {
+        setActiveId(null);
+        return;
+      }
 
-      const targetStatusTasks = tasks.filter(t => t.status === overTask.status);
-      const overIndex = targetStatusTasks.findIndex(t => t.id === overId);
+      const targetStatusTasks = tasks.filter((t) => t.status === overTask.status);
+      const overIndex = targetStatusTasks.findIndex((t) => t.id === overId);
       reorderTasks(activeId, overTask.status, overIndex);
     }
+    setActiveId(null);
   };
+
+  const activeTask = activeId ? tasks.find((task) => task.id === activeId) : null;
 
   return (
     <div className="h-screen bg-background flex flex-col">
       <Header />
-        <div className="flex flex-1 min-h-0">
-          <div className="flex-1 p-8">
-            <DndContext 
-              sensors={sensors}
-              onDragOver={handleDragOver}
-              onDragEnd={handleDragEnd}
-            >
-              <div className="flex gap-6 h-full">
-                {columns.map(column => {
-                    const columnTasks = tasks.filter(task => task.status === column.id);
-                    return (
-                      <div key={column.id} id={column.id} className="flex-1">
-                        <Column 
-                          title={column.title}
-                          droppableId={column.id}
-                          count={columnTasks.length}
-                        >
-                          <SortableContext
-                            items={columnTasks.map(t => t.id)}
-                            strategy={verticalListSortingStrategy}
-                          >
-                            {columnTasks.map((task) => (
-                                <TaskCard
-                                  key={task.id}
-                                  id={task.id}
-                                  title={task.title}
-                                  description={task.description}
-                                />
-                            ))}
-                          </SortableContext>
-                        </Column>
-                      </div>
-                    );
-                  })}
-              </div>
-            </DndContext>
-          </div>
-        <AlertsPanel/>
+      <div className="flex flex-1 min-h-0 overflow-hidden">
+        <div className="flex-1 p-8 relative">
+          <DndContext
+            sensors={sensors}
+            onDragStart={handleDragStart}
+            onDragOver={handleDragOver}
+            onDragEnd={handleDragEnd}
+          >
+            <div className="flex gap-6 h-full">
+              {columns.map((column) => {
+                const columnTasks = tasks.filter(
+                  (task) => task.status === column.id
+                );
+                return (
+                  <Column
+                    key={column.id}
+                    title={column.title}
+                    droppableId={column.id}
+                    count={columnTasks.length}
+                  >
+                    <SortableContext items={columnTasks.map((t) => t.id)}>
+                      {columnTasks.map((task) => (
+                        <TaskCard
+                          key={task.id}
+                          id={task.id}
+                          title={task.title}
+                          description={task.description}
+                        />
+                      ))}
+                    </SortableContext>
+                  </Column>
+                );
+              })}
+            </div>
+
+            <DragOverlay>
+              {activeTask && (
+                <TaskCard
+                  id={activeTask.id}
+                  title={activeTask.title}
+                  description={activeTask.description}
+                />
+              )}
+            </DragOverlay>
+          </DndContext>
+        </div>
+        <AlertsPanel />
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 }
 
-export default KanbanApp
+export default KanbanApp;

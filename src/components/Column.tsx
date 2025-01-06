@@ -16,11 +16,11 @@ interface ColumnProps {
 }
 
 const Column = ({ title, droppableId, children, count }: ColumnProps) => {
-
+    
     const [showModal, setShowModal] = useState(false);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
-    const { setNodeRef } = useDroppable({
+    const { setNodeRef, isOver } = useDroppable({
         id: droppableId,
         data: {
             type: 'column'
@@ -43,7 +43,8 @@ const Column = ({ title, droppableId, children, count }: ColumnProps) => {
     return (
         <div 
             ref={setNodeRef}
-            className="bg-primary/20 w-80 h-full flex flex-col rounded-lg"
+            className={`bg-primary/20 w-80 h-full flex flex-col rounded-lg transition-colors
+                ${isOver ? 'bg-primary/30' : ''}`}
         >
             <div className="px-4 py-3 border-b border-primary/30 flex justify-between items-center">
                 <h3 className="text-text-primary font-semibold flex items-center gap-2">
