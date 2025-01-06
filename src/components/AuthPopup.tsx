@@ -1,7 +1,9 @@
 import { useState, useContext } from "react";
 import { Google, Logout, Settings } from "@mui/icons-material";
+
 import { authService } from "../auth/authService";
 import { AuthContext } from "../context/AuthContext";
+import OptionsMenu from "./OptionsMenu";
 
 interface AuthPopupProps {
     onClose: () => void;
@@ -11,6 +13,7 @@ export const AuthPopup = ({ onClose }: AuthPopupProps) => {
     
     const { user } = useContext(AuthContext);
     const [isLoading, setIsLoading] = useState(false);
+    const [showOptionsMenu, setShowOptionsMenu] = useState(false);
   
     const handleGoogleSignIn = async () => {
         setIsLoading(true);
@@ -25,12 +28,13 @@ export const AuthPopup = ({ onClose }: AuthPopupProps) => {
     };
   
     return (
+        <>
         <div className="absolute right-4 top-20 w-64 bg-primary/95 rounded-lg shadow-xl p-4 z-50">
             {user ? (
                 <div className="flex flex-col">
                     <button
                         onClick={() => {
-                            onClose();
+                            setShowOptionsMenu(!showOptionsMenu);
                         }}
                         className="w-full p-2 text-text-secondary hover:bg-primary/40 rounded-lg font-medium flex items-center gap-2 transition-colors"
                     >
@@ -63,5 +67,7 @@ export const AuthPopup = ({ onClose }: AuthPopupProps) => {
                 </>
             )}
         </div>
+        {showOptionsMenu && <OptionsMenu onClose={() => setShowOptionsMenu(false)} />}
+        </>
     );
 };
