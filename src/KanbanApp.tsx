@@ -19,21 +19,27 @@ import Header from "./components/Header";
 import TaskCard from "./components/TaskCard";
 import AlertsPanel from "./components/AlertsPanel";
 import Footer from "./components/Footer";
+import { LanguageContext } from "./i18n/LanguageContext";
 
-const columns: { id: TaskStatus; title: string }[] = [
-  { id: "todo", title: "To Do" },
-  { id: "inProgress", title: "In Progress" },
-  { id: "reviewing", title: "Reviewing" },
-  { id: "done", title: "Done" },
-];
 
 function KanbanApp() {
+
+  const languageContext = useContext(LanguageContext);
+  if (!languageContext) throw new Error('Language Context not found');
+  const { t } = languageContext;
 
   const tasksContext = useContext(TasksContext);
   if (!tasksContext) throw new Error("Tasks Context not found.");
 
   const { tasks, moveTask, reorderTasks } = tasksContext;
   const [activeId, setActiveId] = useState<string | null>(null);
+
+  const columns: { id: TaskStatus; title: string }[] = [
+    { id: "todo", title: t('columns.todo') },
+    { id: "inProgress", title: t('columns.inProgress') },
+    { id: "reviewing", title: t('columns.reviewing') },
+    { id: "done", title: t('columns.done') },
+  ];
 
   const sensors = useSensors(
     useSensor(PointerSensor, {

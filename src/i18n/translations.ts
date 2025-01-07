@@ -79,7 +79,7 @@ export const translations = {
             todo: "Pendiente",
             inProgress: "En Progreso",
             reviewing: "Revisando",
-            done: "Completado"
+            done: "Completada"
         },
         alerts: {
             title: "Alertas",
