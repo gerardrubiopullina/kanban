@@ -1,24 +1,52 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useContext, useEffect, useState } from "react";
 import { Task, TaskStatus } from "../types";
 import { TasksContext } from "./TasksContext";
 import { tasksService } from "../firebase/tasksService";
+import { AuthContext } from "./AuthContext";
+
+
+const LOCALSTORAGE_KEY = 'kanban_tasks';
 
 export function TasksProvider({ children }: { children: ReactNode }) {
     
+    const { user } = useContext(AuthContext);
+
     const [tasks, setTasks] = useState<Task[]>([]);
 
-    useEffect(() => {
-        const loadTasks = async () => {
-            try {
+    const loadTasks = async () => {
+        try {
+            if (user) {
                 const fetchedTasks = await tasksService.getTasks();
                 setTasks(fetchedTasks);
-            } catch (error) {
-                console.error('Failed to load tasks:', error);
+            } else {
+                const savedTasks = localStorage.getItem(LOCALSTORAGE_KEY);
+                if (savedTasks) {
+                    setTasks(JSON.parse(savedTasks));
+                }
             }
-        };
+        } catch (error) {
+            console.error('Failed to load tasks:', error);
+        }
+    };
 
+    useEffect(() => {
         loadTasks();
-    }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user]);
+
+    const saveTasks = (updatedTasks: Task[]) => {
+        if (!user) {
+            localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(updatedTasks));
+        }
+    };
+
+    const getNextLocalId = () => {
+        const maxId = tasks.reduce((max, task) => {
+            const numId = parseInt(task.id.replace('local_', ''));
+            return numId > max ? numId : max;
+        }, 0);
+        return `local_${maxId + 1}`;
+    };
 
     const addTask = async(title: string, description?: string) => {
         const newTask = {
@@ -28,8 +56,16 @@ export function TasksProvider({ children }: { children: ReactNode }) {
         };
 
         try {
-            const id = await tasksService.addTask(newTask);
-            setTasks(prev => [...prev, { ...newTask, id }]);
+            if (user) {
+                const id = await tasksService.addTask(newTask);
+                setTasks(prev => [...prev, { ...newTask, id }]);
+            } else {
+                const id = getNextLocalId();
+                const taskWithId = { ...newTask, id };
+                const updatedTasks = [...tasks, taskWithId];
+                setTasks(updatedTasks);
+                saveTasks(updatedTasks);
+            }
         } catch (error) {
             console.error('Failed to add task:', error);
         }
@@ -37,12 +73,16 @@ export function TasksProvider({ children }: { children: ReactNode }) {
 
     const moveTask = async(taskId: string, newStatus: TaskStatus) => {
         try {
-            await tasksService.updateTask(taskId, { status: newStatus });
-            setTasks(tasks.map(task =>
+            if (user) {
+                await tasksService.updateTask(taskId, { status: newStatus });
+            }
+            const updatedTasks = tasks.map(task =>
                 task.id === taskId
                     ? { ...task, status: newStatus }
                     : task
-            ));
+            );
+            setTasks(updatedTasks);
+            saveTasks(updatedTasks);
         } catch (error) {
             console.error('Failed to move task:', error);
         }
@@ -53,7 +93,9 @@ export function TasksProvider({ children }: { children: ReactNode }) {
         if (!taskToMove) return;
 
         try {
-            await tasksService.updateTask(taskId, { status: newStatus });
+            if (user) {
+                await tasksService.updateTask(taskId, { status: newStatus });
+            }
             
             const newTasks = tasks.filter(t => t.id !== taskId);
             const targetStatusTasks = newTasks.filter(t => t.status === newStatus);
@@ -61,10 +103,12 @@ export function TasksProvider({ children }: { children: ReactNode }) {
             taskToMove.status = newStatus;
             targetStatusTasks.splice(newIndex, 0, taskToMove);
             
-            setTasks([
+            const updatedTasks = [
                 ...newTasks.filter(t => t.status !== newStatus),
                 ...targetStatusTasks
-            ]);
+            ];
+            setTasks(updatedTasks);
+            saveTasks(updatedTasks);
         } catch (error) {
             console.error('Failed to reorder task:', error);
         }
@@ -72,12 +116,16 @@ export function TasksProvider({ children }: { children: ReactNode }) {
 
     const updateTask = async(taskId: string, title: string, description?: string) => {
         try {
-            await tasksService.updateTask(taskId, {title, description});
-            setTasks(tasks.map(task =>
+            if (user) {
+                await tasksService.updateTask(taskId, { title, description });
+            }
+            const updatedTasks = tasks.map(task =>
                 task.id === taskId
-                    ? {...task, title, description}
+                    ? { ...task, title, description }
                     : task
-            ));
+            );
+            setTasks(updatedTasks);
+            saveTasks(updatedTasks);
         } catch (error) {
             console.log('Failed to update task:', error);
         }
@@ -85,8 +133,12 @@ export function TasksProvider({ children }: { children: ReactNode }) {
 
     const deleteTask = async(taskId: string) => {
         try {
-            await tasksService.deleteTask(taskId);
-            setTasks(tasks.filter(task => task.id !== taskId));
+            if (user) {
+                await tasksService.deleteTask(taskId);
+            }
+            const updatedTasks = tasks.filter(task => task.id !== taskId);
+            setTasks(updatedTasks);
+            saveTasks(updatedTasks);
         } catch (error) {
             console.error('Failed to delete task:', error)
             throw error;
@@ -96,8 +148,12 @@ export function TasksProvider({ children }: { children: ReactNode }) {
     const deleteCompletedTasks = async() => {
         try {
             const completedTasks = tasks.filter(task => task.status === 'done');
-            await Promise.all(completedTasks.map(task => tasksService.deleteTask(task.id)));
-            setTasks(tasks.filter(task => task.status !== 'done'));
+            if (user) {
+                await Promise.all(completedTasks.map(task => tasksService.deleteTask(task.id)));
+            }
+            const updatedTasks = tasks.filter(task => task.status !== 'done');
+            setTasks(updatedTasks);
+            saveTasks(updatedTasks);
         } catch (error) {
             console.error('Failed to delete completed tasks:', error);
             throw error;
