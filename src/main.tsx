@@ -7,14 +7,17 @@ import { TasksProvider } from './context/TasksProvider.tsx'
 import { AuthProvider } from './context/AuthProvider.tsx'
 
 import './index.css'
+import { SettingsProvider } from './context/SettingsProvider.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <AuthProvider>
       <LanguageProvider>
-        <TasksProvider>
-          <KanbanApp />
-        </TasksProvider>
+          <TasksProvider>
+            <SettingsProvider>
+              <KanbanApp />
+            </SettingsProvider>
+          </TasksProvider>
       </LanguageProvider>
     </AuthProvider>
   </StrictMode>,

@@ -1,10 +1,10 @@
 import { useState, useContext } from "react";
 import { Google, Logout, Settings } from "@mui/icons-material";
 
-import { authService } from "../auth/authService";
-import { AuthContext } from "../context/AuthContext";
+import { authService } from "../../auth/authService";
+import { AuthContext } from "../../context/AuthContext";
 import OptionsMenu from "./OptionsMenu";
-import { LanguageContext } from "../i18n/LanguageContext";
+import { LanguageContext } from "../../i18n/LanguageContext";
 
 interface AuthPopupProps {
     onClose: () => void;
@@ -72,7 +72,12 @@ export const AuthPopup = ({ onClose }: AuthPopupProps) => {
                 </>
             )}
         </div>
-        {showOptionsMenu && <OptionsMenu onClose={() => setShowOptionsMenu(false)} />}
+        {showOptionsMenu && 
+            <OptionsMenu 
+                onClose={() => setShowOptionsMenu(false)} 
+                returnToAuth={() => setShowOptionsMenu(false)}
+            />
+        }
         </>
     );
 };

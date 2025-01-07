@@ -1,10 +1,11 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { MoreVert } from "@mui/icons-material";
 
-import TaskOptions from "./Tasks/TaskOptions";
+import TaskOptions from "./tasks/TaskOptions";
+import { SettingsContext } from "../context/SettingsContext";
 
 interface TaskCardProps {
     id: string;
@@ -13,6 +14,10 @@ interface TaskCardProps {
 }
   
 const TaskCard = ({ id, title, description }: TaskCardProps) => {
+
+    const settingsContext = useContext(SettingsContext);
+    if (!settingsContext) throw new Error('Settings Context not found');
+    const { showDescriptions } = settingsContext;
 
     const [showOptions, setShowOptions] = useState(false);
     const [buttonPosition, setButtonPosition] = useState<{ x: number, y: number } | null>(null);
@@ -89,7 +94,7 @@ const TaskCard = ({ id, title, description }: TaskCardProps) => {
                     </button>
                 </div>
             </div>
-            {description && (
+            {description && showDescriptions && (
                 <div className="text-text-secondary text-sm mt-2">
                     {formatDescription(description)}
                 </div>

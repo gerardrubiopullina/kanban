@@ -1,7 +1,7 @@
-import { ArrowBack } from "@mui/icons-material";
-import { Flag } from "react-beauty-flags";
 import { useContext } from 'react';
-import { LanguageContext } from '../i18n/LanguageContext';
+import { LanguageContext } from '../../i18n/LanguageContext';
+import { Flag } from "react-beauty-flags";
+import BackButton from "./BackButton";
 
 interface LanguageMenuProps {
    onBack: () => void;
@@ -11,21 +11,15 @@ const LanguageMenu = ({ onBack }: LanguageMenuProps) => {
 
     const languageContext = useContext(LanguageContext);
     if (!languageContext) throw new Error('Language Context not found');
+    const { t } = languageContext;
     const { setLanguage, language } = languageContext;
 
     return (
         <div className="absolute right-4 top-20 w-72 bg-primary rounded-lg shadow-xl overflow-hidden z-50">
-            <div className="bg-primary border-b border-primary/30">
-                <button
-                    onClick={onBack}
-                    className="w-full p-4 text-text-secondary hover:text-text-primary flex items-center gap-3 
-                    transition-colors group"
-                >
-                    <ArrowBack className="h-5 w-5 group-hover:-translate-x-1 transition-transform" />
-                    <span className="font-medium">Language Settings</span>
-                </button>
-            </div>
-
+            <BackButton 
+                onBack={onBack}
+                label={t('ui.langSettings')}
+            />
             <div className="p-2">
                 <button 
                     onClick={() => setLanguage('en')}

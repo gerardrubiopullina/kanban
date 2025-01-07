@@ -1,9 +1,9 @@
 import { useContext, useState } from "react";
-import { authService } from "../auth/authService";
+import { authService } from "../../auth/authService";
 import { Login, Logout } from "@mui/icons-material";
 import { AuthPopup } from "./AuthPopup";
-import { AuthContext } from "../context/AuthContext";
-import { LanguageContext } from "../i18n/LanguageContext";
+import { AuthContext } from "../../context/AuthContext";
+import { LanguageContext } from "../../i18n/LanguageContext";
 
 
 export const UserMenu = () => {

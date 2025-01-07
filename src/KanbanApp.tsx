@@ -20,6 +20,7 @@ import TaskCard from "./components/TaskCard";
 import AlertsPanel from "./components/AlertsPanel";
 import Footer from "./components/Footer";
 import { LanguageContext } from "./i18n/LanguageContext";
+import { SettingsContext } from "./context/SettingsContext";
 
 
 function KanbanApp() {
@@ -31,14 +32,18 @@ function KanbanApp() {
   const tasksContext = useContext(TasksContext);
   if (!tasksContext) throw new Error("Tasks Context not found.");
 
+  const settingsContext = useContext(SettingsContext);
+  if (!settingsContext) throw new Error("Settings Context not found.");
+  const { showReview } = settingsContext;
+
   const { tasks, moveTask, reorderTasks } = tasksContext;
   const [activeId, setActiveId] = useState<string | null>(null);
 
   const columns: { id: TaskStatus; title: string }[] = [
-    { id: "todo", title: t('columns.todo') },
-    { id: "inProgress", title: t('columns.inProgress') },
-    { id: "reviewing", title: t('columns.reviewing') },
-    { id: "done", title: t('columns.done') },
+    { id: "todo" as TaskStatus, title: t('columns.todo') },
+    { id: "inProgress" as TaskStatus, title: t('columns.inProgress') },
+    ...(showReview ? [{ id: "reviewing" as TaskStatus, title: t('columns.reviewing') }] : []),
+    { id: "done" as TaskStatus, title: t('columns.done') },
   ];
 
   const sensors = useSensors(

@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { Edit, Delete } from "@mui/icons-material";
 
-import EditTaskForm from './EditTaskForm';
 import DeleteConfirmation from './DeleteConfirmation';
+import EditTaskForm from './EditTaskForm';
 
 interface TaskOptionsProps {
     onClose: () => void;

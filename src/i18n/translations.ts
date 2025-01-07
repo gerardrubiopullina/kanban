@@ -44,6 +44,11 @@ export const translations = {
         ui: {
             title: "Daily Tasks",
             projectBy: "Kanban Board project by ",
+            langSettings: "Language settings",
+            colSettings: "Column settings",
+            showReview: "Show reviewing",
+            hideDesc: "Show description",
+            cannotHideReviewing: "Can not hide a column with active tasks",
         }
     },
     es: {
@@ -73,7 +78,7 @@ export const translations = {
             clearCompletedConfirmation1: "¿Estás seguro de que quieres eliminar",
             clearCompletedConfirmation2: "todas las tareas completadas",
             clearCompletedConfirmation3: "? Esta acción no se puede deshacer.",
-            addNewTasks: "Agregar nuevas tareas",
+            addNewTasks: "Crea nuevas tareas",
         },
         columns: {
             todo: "Pendiente",
@@ -89,6 +94,11 @@ export const translations = {
         ui: {
             title: "Tareas Diarias",
             projectBy: "Kanban Board: Proyecto hecho por ",
+            langSettings: "Seleccionar idioma",
+            colSettings: "Opciones de columna",
+            showReview: "Mostrar revisando",
+            hideDesc: "Mostrar descripción",
+            cannotHideReviewing: "No se puede esconder una columna con tareas activas",
         }
     }
 };

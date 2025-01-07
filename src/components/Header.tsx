@@ -2,7 +2,7 @@ import { useState, useContext, useEffect, useRef } from "react";
 import { Person } from "@mui/icons-material";
 import { AuthContext } from "../context/AuthContext";
 import { LanguageContext } from "../i18n/LanguageContext";
-import { AuthPopup } from "./AuthPopup";
+import { AuthPopup } from "./menus/AuthPopup";
 
 const Header = () => {
 
