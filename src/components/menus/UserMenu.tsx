@@ -1,11 +1,16 @@
 import { useContext, useState } from "react";
-import { authService } from "../auth/authService";
+import { authService } from "../../auth/authService";
 import { Login, Logout } from "@mui/icons-material";
 import { AuthPopup } from "./AuthPopup";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
+import { LanguageContext } from "../../i18n/LanguageContext";
 
 
 export const UserMenu = () => {
+
+    const languageContext = useContext(LanguageContext);
+    if (!languageContext) throw new Error('Language Context not found');
+    const { t } = languageContext;
 
     const { user } = useContext(AuthContext);
     const [showPopup, setShowPopup] = useState(false);
@@ -29,7 +34,7 @@ export const UserMenu = () => {
                 </div>
             ) : (
                 <>
-                    <span className="text-white">Log in to save your tasks</span>
+                    <span className="text-white">{t('common.login')}</span>
                     <button 
                         onClick={() => setShowPopup(true)}
                         className="p-2 hover:bg-primary/40 rounded-full"

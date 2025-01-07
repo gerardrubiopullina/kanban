@@ -1,8 +1,13 @@
 import { useContext, useRef, useState } from "react";
 import { TasksContext } from "../../context/TasksContext";
+import { LanguageContext } from "../../i18n/LanguageContext";
 
 
 const NewTaskForm = ({ onClose }: { onClose: () => void }) => {
+
+  const languageContext = useContext(LanguageContext);
+    if (!languageContext) throw new Error('Language Context not found');
+    const { t } = languageContext;
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -41,7 +46,7 @@ const NewTaskForm = ({ onClose }: { onClose: () => void }) => {
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
       <div className="bg-background w-[550px] rounded-xl shadow-2xl">
         <form onSubmit={handleSubmit} className="p-8">
-          <h2 className="text-2xl font-semibold text-text-primary mb-8">Create a new task</h2>
+          <h2 className="text-2xl font-semibold text-text-primary mb-8">{t('tasks.newTask')}</h2>
 
           <div className="space-y-6">
             <div>
@@ -51,7 +56,7 @@ const NewTaskForm = ({ onClose }: { onClose: () => void }) => {
                 onChange={(e) => setTitle(e.target.value)}
                 onKeyDown={handleTitleKeyDown}
                 className="w-full px-0 py-2 bg-transparent border-b-2 border-primary/30 text-text-primary placeholder:text-text-secondary/50 text-lg outline-none focus:border-accent transition-colors"
-                placeholder="Task title"
+                placeholder={t('tasks.taskTitle')}
                 required
                 autoFocus
               />
@@ -63,7 +68,7 @@ const NewTaskForm = ({ onClose }: { onClose: () => void }) => {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 className="w-full px-4 py-3 bg-primary/10 rounded-xl text-text-primary placeholder:text-text-secondary/50 outline-none min-h-[180px] resize-none text-base whitespace-pre-wrap"
-                placeholder="Add description..."
+                placeholder={t('tasks.description')}
               />
             </div>
           </div>
@@ -74,14 +79,14 @@ const NewTaskForm = ({ onClose }: { onClose: () => void }) => {
               onClick={onClose}
               className="px-6 py-2.5 text-text-secondary hover:text-text-primary transition-colors font-medium"
             >
-              Cancel
+              {t('common.cancel')}
             </button>
             <button
               type="submit"
               disabled={isLoading || !title.trim()}
               className="px-6 py-2.5 bg-accent text-primary rounded-lg hover:bg-accent/90 transition-colors disabled:opacity-50 font-medium"
             >
-              Create
+              {t('common.create')}
             </button>
           </div>
         </form>

@@ -4,9 +4,10 @@ import { Add, DeleteSweep } from "@mui/icons-material";
 
 import { TasksContext } from "../context/TasksContext";
 
-import NewTaskButton from "./Tasks/NewTaskButton";
-import NewTaskForm from "./Tasks/NewTaskForm";
-import DeleteConfirmation from "./Tasks/DeleteConfirmation";
+import NewTaskButton from "./tasks/NewTaskButton";
+import NewTaskForm from "./tasks/NewTaskForm";
+import DeleteConfirmation from "./tasks/DeleteConfirmation";
+import { LanguageContext } from "../i18n/LanguageContext";
 
 interface ColumnProps {
     title: string;
@@ -17,10 +18,14 @@ interface ColumnProps {
 
 const Column = ({ title, droppableId, children, count }: ColumnProps) => {
 
+    const languageContext = useContext(LanguageContext);
+    if (!languageContext) throw new Error('Language Context not found');
+    const { t } = languageContext;
+    
     const [showModal, setShowModal] = useState(false);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
-    const { setNodeRef } = useDroppable({
+    const { setNodeRef, isOver } = useDroppable({
         id: droppableId,
         data: {
             type: 'column'
@@ -43,7 +48,8 @@ const Column = ({ title, droppableId, children, count }: ColumnProps) => {
     return (
         <div 
             ref={setNodeRef}
-            className="bg-primary/20 w-80 h-full flex flex-col rounded-lg"
+            className={`bg-primary/20 w-80 h-full flex flex-col rounded-lg transition-colors
+                ${isOver ? 'bg-primary/30' : ''}`}
         >
             <div className="px-4 py-3 border-b border-primary/30 flex justify-between items-center">
                 <h3 className="text-text-primary font-semibold flex items-center gap-2">
@@ -76,7 +82,7 @@ const Column = ({ title, droppableId, children, count }: ColumnProps) => {
                             className="flex flex-col items-center gap-2 p-6 rounded-xl hover:bg-primary/20 transition-colors group"
                         >
                             <Add className="h-10 w-10 text-text-secondary/30 group-hover:text-text-secondary/50" />
-                            <span className="text-text-secondary/50 text-sm group-hover:text-text-secondary">Add new tasks</span>
+                            <span className="text-text-secondary/50 text-sm group-hover:text-text-secondary">{t('tasks.addNewTasks')}</span>
                         </button>
                     </div>
                 )}
