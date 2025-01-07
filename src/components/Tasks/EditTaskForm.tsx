@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import { TasksContext } from "../../context/TasksContext";
+import { LanguageContext } from "../../i18n/LanguageContext";
 
 interface EditTaskFormProps {
     taskId: string;
@@ -9,6 +10,10 @@ interface EditTaskFormProps {
 }
 
 const EditTaskForm = ({ taskId, initialTitle, initialDescription = "", onClose }: EditTaskFormProps) => {
+
+    const languageContext = useContext(LanguageContext);
+    if (!languageContext) throw new Error('Language Context not found');
+    const { t } = languageContext;
 
     const [title, setTitle] = useState(initialTitle);
     const [description, setDescription] = useState(initialDescription);
@@ -37,7 +42,7 @@ const EditTaskForm = ({ taskId, initialTitle, initialDescription = "", onClose }
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
             <div className="bg-background w-[550px] rounded-xl shadow-2xl">
                 <form onSubmit={handleSubmit} className="p-8">
-                    <h2 className="text-2xl font-semibold text-text-primary mb-8">Edit task</h2>
+                    <h2 className="text-2xl font-semibold text-text-primary mb-8">{t('tasks.editTask')}</h2>
 
                     <div className="space-y-6">
                         <div>
@@ -67,14 +72,14 @@ const EditTaskForm = ({ taskId, initialTitle, initialDescription = "", onClose }
                             onClick={onClose}
                             className="px-6 py-2.5 text-text-secondary hover:text-text-primary transition-colors font-medium"
                         >
-                            Cancel
+                            {t('common.cancel')}
                         </button>
                         <button
                             type="submit"
                             disabled={isLoading || !title.trim()}
                             className="px-6 py-2.5 bg-accent text-primary rounded-lg hover:bg-accent/90 transition-colors disabled:opacity-50 font-medium"
                         >
-                            Save
+                            {t('common.save')}
                         </button>
                     </div>
                 </form>

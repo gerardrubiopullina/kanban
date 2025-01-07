@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react';
 import { TasksContext } from '../../context/TasksContext';
+import { LanguageContext } from '../../i18n/LanguageContext';
 
 interface DeleteConfirmationProps {
     taskId: string;
@@ -9,6 +10,11 @@ interface DeleteConfirmationProps {
 }
 
 const DeleteConfirmation = ({ taskId, taskTitle, onClose, customDeleteHandler }: DeleteConfirmationProps) => {
+
+    const languageContext = useContext(LanguageContext);
+    if (!languageContext) throw new Error('Language Context not found');
+    const { t } = languageContext;
+
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -40,18 +46,18 @@ const DeleteConfirmation = ({ taskId, taskTitle, onClose, customDeleteHandler }:
             <div className="bg-background w-[400px] rounded-xl shadow-2xl">
                 <div className="p-8">
                     <h2 className="text-2xl font-semibold text-text-primary mb-4">
-                        {taskId === 'completed' ? 'Clear Completed Tasks' : 'Delete Task'}
+                        {taskId === 'completed' ? t('tasks.clearCompleted') : t('tasks.deleteTask')}
                     </h2>
                     {taskId === 'completed' ? (
                         <p className="text-text-secondary mb-8">
-                            Are you sure you want to remove 
-                            <span className='font-bold text-lg'> all completed tasks</span>
-                            ? This action cannot be undone.
+                            {t('tasks.clearCompletedConfirmation1')} 
+                            <span className='font-bold text-lg'> {t('tasks.clearCompletedConfirmation2')}</span>
+                            {t('tasks.clearCompletedConfirmation3')}
                         </p>
                     ) : (
                         <div className="mb-8">
                             <p className="text-text-secondary mb-3">
-                                Are you sure you want to delete this task? This action cannot be undone.
+                                {t('tasks.deleteConfirmation')}
                             </p>
                             <span className="text-text-primary font-medium">{taskTitle}</span>
                         </div>
@@ -68,14 +74,14 @@ const DeleteConfirmation = ({ taskId, taskTitle, onClose, customDeleteHandler }:
                             disabled={isLoading}
                             className="px-6 py-2.5 text-text-secondary hover:text-text-primary transition-colors font-medium disabled:opacity-50"
                         >
-                            Cancel
+                            {t('common.cancel')}
                         </button>
                         <button
                             onClick={handleDelete}
                             disabled={isLoading}
                             className="px-6 py-2.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors font-medium disabled:opacity-50"
                         >
-                            {isLoading ? 'Deleting...' : 'Delete'}
+                            {isLoading ? t('common.deleting') : t('common.delete')}
                         </button>
                     </div>
                 </div>

@@ -1,12 +1,18 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Language, ViewColumn } from "@mui/icons-material";
 import LanguageMenu from './LanguageMenu';
+import { LanguageContext } from '../i18n/LanguageContext';
 
 interface OptionsMenuProps {
     onClose: () => void;
 }
 
 const OptionsMenu = ({ onClose }: OptionsMenuProps) => {
+
+    const languageContext = useContext(LanguageContext);
+    if (!languageContext) throw new Error('Language Context not found');
+    const { t } = languageContext;
+
     const [showLanguageMenu, setShowLanguageMenu] = useState(false);
 
     if (showLanguageMenu) {
@@ -22,7 +28,7 @@ const OptionsMenu = ({ onClose }: OptionsMenuProps) => {
                 >
                     <div className="flex items-center gap-2">
                         <Language className="h-5 w-5" />
-                        <span>Language</span>
+                        <span>{t('common.language')}</span>
                     </div>
                     <span className="text-sm text-text-secondary/50">English</span>
                 </button>
@@ -32,7 +38,7 @@ const OptionsMenu = ({ onClose }: OptionsMenuProps) => {
                     className="w-full p-3 text-text-secondary hover:bg-primary/40 rounded-lg font-medium flex items-center gap-2 transition-colors"
                 >
                     <ViewColumn className="h-5 w-5" />
-                    <span>Columns</span>
+                    <span>{t('common.columns')}</span>
                 </button>
             </div>
         </div>

@@ -1,9 +1,15 @@
 import { useState, useContext, useEffect, useRef } from "react";
 import { Person } from "@mui/icons-material";
 import { AuthContext } from "../context/AuthContext";
+import { LanguageContext } from "../i18n/LanguageContext";
 import { AuthPopup } from "./AuthPopup";
 
 const Header = () => {
+
+    const languageContext = useContext(LanguageContext);
+    if (!languageContext) throw new Error('Language Context not found');
+    const { t } = languageContext;
+
     const { user } = useContext(AuthContext);
     const [showPopup, setShowPopup] = useState(false);
     const popupRef = useRef<HTMLDivElement>(null);
@@ -31,7 +37,7 @@ const Header = () => {
                     <div className="h-8 w-8 rounded-lg bg-accent flex items-center justify-center">
                         <span className="text-primary font-bold text-lg">K</span>
                     </div>
-                    <h1 className="text-xl font-semibold text-text-primary">Daily Tasks</h1>
+                    <h1 className="text-xl font-semibold text-text-primary">{t('ui.title')}</h1>
                 </div>
 
                 <div className="flex items-center gap-3">

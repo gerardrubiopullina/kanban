@@ -7,6 +7,7 @@ import { TasksContext } from "../context/TasksContext";
 import NewTaskButton from "./Tasks/NewTaskButton";
 import NewTaskForm from "./Tasks/NewTaskForm";
 import DeleteConfirmation from "./Tasks/DeleteConfirmation";
+import { LanguageContext } from "../i18n/LanguageContext";
 
 interface ColumnProps {
     title: string;
@@ -16,6 +17,10 @@ interface ColumnProps {
 }
 
 const Column = ({ title, droppableId, children, count }: ColumnProps) => {
+
+    const languageContext = useContext(LanguageContext);
+    if (!languageContext) throw new Error('Language Context not found');
+    const { t } = languageContext;
     
     const [showModal, setShowModal] = useState(false);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
@@ -77,7 +82,7 @@ const Column = ({ title, droppableId, children, count }: ColumnProps) => {
                             className="flex flex-col items-center gap-2 p-6 rounded-xl hover:bg-primary/20 transition-colors group"
                         >
                             <Add className="h-10 w-10 text-text-secondary/30 group-hover:text-text-secondary/50" />
-                            <span className="text-text-secondary/50 text-sm group-hover:text-text-secondary">Add new tasks</span>
+                            <span className="text-text-secondary/50 text-sm group-hover:text-text-secondary">{t('tasks.addNewTasks')}</span>
                         </button>
                     </div>
                 )}

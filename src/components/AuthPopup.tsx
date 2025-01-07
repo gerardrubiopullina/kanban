@@ -4,12 +4,17 @@ import { Google, Logout, Settings } from "@mui/icons-material";
 import { authService } from "../auth/authService";
 import { AuthContext } from "../context/AuthContext";
 import OptionsMenu from "./OptionsMenu";
+import { LanguageContext } from "../i18n/LanguageContext";
 
 interface AuthPopupProps {
     onClose: () => void;
 }
   
 export const AuthPopup = ({ onClose }: AuthPopupProps) => {
+
+    const languageContext = useContext(LanguageContext);
+    if (!languageContext) throw new Error('Language Context not found');
+    const { t } = languageContext;
     
     const { user } = useContext(AuthContext);
     const [isLoading, setIsLoading] = useState(false);
@@ -39,7 +44,7 @@ export const AuthPopup = ({ onClose }: AuthPopupProps) => {
                         className="w-full p-2 text-text-secondary hover:bg-primary/40 rounded-lg font-medium flex items-center gap-2 transition-colors"
                     >
                         <Settings className="h-5 w-5" />
-                        Settings
+                        {t('common.settings')}
                     </button>
                     <div className="my-2 border-t border-text-primary/30"></div>
                     <button
@@ -50,12 +55,12 @@ export const AuthPopup = ({ onClose }: AuthPopupProps) => {
                         className="w-full p-2 text-text-secondary hover:bg-primary/40 rounded-lg font-medium flex items-center gap-2 transition-colors"
                     >
                         <Logout className="h-5 w-5" />
-                        Sign Out
+                        {t('common.signOut')}
                     </button>
                 </div>
             ) : (
                 <>
-                    <h2 className="text-sm font-medium text-text-secondary mb-3">Sign in with</h2>
+                    <h2 className="text-sm font-medium text-text-secondary mb-3">{t('common.signIn')}</h2>
                     <button
                         onClick={handleGoogleSignIn}
                         disabled={isLoading}
