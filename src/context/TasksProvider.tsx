@@ -12,8 +12,10 @@ export function TasksProvider({ children }: { children: ReactNode }) {
     const { user } = useContext(AuthContext);
 
     const [tasks, setTasks] = useState<Task[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const loadTasks = async () => {
+        setIsLoading(true);
         try {
             if (user) {
                 const fetchedTasks = await tasksService.getTasks();
@@ -26,6 +28,8 @@ export function TasksProvider({ children }: { children: ReactNode }) {
             }
         } catch (error) {
             console.error('Failed to load tasks:', error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -163,7 +167,8 @@ export function TasksProvider({ children }: { children: ReactNode }) {
     return (
         <TasksContext.Provider 
             value={{ 
-                tasks, 
+                tasks: isLoading ? [] : tasks,
+                isLoading, 
                 addTask, 
                 moveTask, 
                 reorderTasks,

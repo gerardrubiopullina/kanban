@@ -31,12 +31,12 @@ function KanbanApp() {
 
   const tasksContext = useContext(TasksContext);
   if (!tasksContext) throw new Error("Tasks Context not found.");
+  const { tasks, isLoading, moveTask, reorderTasks } = tasksContext;
 
   const settingsContext = useContext(SettingsContext);
   if (!settingsContext) throw new Error("Settings Context not found.");
   const { showReview } = settingsContext;
 
-  const { tasks, moveTask, reorderTasks } = tasksContext;
   const [activeId, setActiveId] = useState<string | null>(null);
 
   const columns: { id: TaskStatus; title: string }[] = [
@@ -127,49 +127,55 @@ function KanbanApp() {
       <Header />
       <div className="flex flex-1 min-h-0 overflow-hidden">
         <div className="flex-1 p-8 relative">
-          <DndContext
-            sensors={sensors}
-            onDragStart={handleDragStart}
-            onDragOver={handleDragOver}
-            onDragEnd={handleDragEnd}
-          >
-            <div className="flex gap-6 h-full">
-              {columns.map((column) => {
-                const columnTasks = tasks.filter(
-                  (task) => task.status === column.id
-                );
-                return (
-                  <Column
-                    key={column.id}
-                    title={column.title}
-                    droppableId={column.id}
-                    count={columnTasks.length}
-                  >
-                    <SortableContext items={columnTasks.map((t) => t.id)}>
-                      {columnTasks.map((task) => (
-                        <TaskCard
-                          key={task.id}
-                          id={task.id}
-                          title={task.title}
-                          description={task.description}
-                        />
-                      ))}
-                    </SortableContext>
-                  </Column>
-                );
-              })}
+          {isLoading ? (
+            <div className="flex items-center justify-center h-full">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent"></div>
             </div>
+          ) : (
+            <DndContext
+                sensors={sensors}
+                onDragStart={handleDragStart}
+                onDragOver={handleDragOver}
+                onDragEnd={handleDragEnd}
+            >
+              <div className="flex gap-6 h-full">
+                {columns.map((column) => {
+                  const columnTasks = tasks.filter(
+                    (task) => task.status === column.id
+                  );
+                  return (
+                    <Column
+                      key={column.id}
+                      title={column.title}
+                      droppableId={column.id}
+                      count={columnTasks.length}
+                    >
+                      <SortableContext items={columnTasks.map((t) => t.id)}>
+                        {columnTasks.map((task) => (
+                          <TaskCard
+                            key={task.id}
+                            id={task.id}
+                            title={task.title}
+                            description={task.description}
+                          />
+                        ))}
+                      </SortableContext>
+                    </Column>
+                  );
+                })}
+              </div>
 
-            <DragOverlay>
-              {activeTask && (
-                <TaskCard
-                  id={activeTask.id}
-                  title={activeTask.title}
-                  description={activeTask.description}
-                />
-              )}
-            </DragOverlay>
-          </DndContext>
+              <DragOverlay>
+                {activeTask && (
+                  <TaskCard
+                    id={activeTask.id}
+                    title={activeTask.title}
+                    description={activeTask.description}
+                  />
+                )}
+              </DragOverlay>
+            </DndContext>
+          )}
         </div>
         <AlertsPanel />
       </div>
