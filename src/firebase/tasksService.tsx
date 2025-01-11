@@ -1,12 +1,13 @@
 import { collection, addDoc, getDocs, updateDoc, doc, deleteDoc } from 'firebase/firestore/lite';
 import { db } from './config';
 import { Task } from '../types';
+import { User } from 'firebase/auth';
 
 export const tasksService = {
-    async getTasks() {
+    async getTasks(user: User) {
         try {
-            const tasksCollection = collection(db, 'tasks');
-            const querySnapshot = await getDocs(tasksCollection);
+            const userTasksCollection = collection(db, `users/${user.uid}/tasks`);
+            const querySnapshot = await getDocs(userTasksCollection);
             
             return querySnapshot.docs.map(doc => ({
                 id: doc.id,
@@ -20,12 +21,14 @@ export const tasksService = {
         }
     },
 
-    async addTask(task: Omit<Task, 'id'>) {
+    async addTask(user: User, task: Omit<Task, 'id'>) {
         try {
-            const docRef = await addDoc(collection(db, 'tasks'), {
+            const userTasksCollection = collection(db, `users/${user.uid}/tasks`);
+            const docRef = await addDoc(userTasksCollection, {
                 title: task.title,
                 description: task.description,
-                status: task.status
+                status: task.status,
+                createdAt: new Date().toISOString()
             });
             return docRef.id;
         } catch (error) {
@@ -34,9 +37,9 @@ export const tasksService = {
         }
     },
 
-    async updateTask(taskId: string, updates: Partial<Task>) {
+    async updateTask(user: User, taskId: string, updates: Partial<Task>) {
         try {
-            const taskRef = doc(db, 'tasks', taskId);
+            const taskRef = doc(db, `users/${user.uid}/tasks`, taskId);
             await updateDoc(taskRef, updates);
         } catch (error) {
             console.error('Error updating task:', error);
@@ -44,9 +47,9 @@ export const tasksService = {
         }
     },
 
-    async deleteTask(taskId: string) {
+    async deleteTask(user:User, taskId: string) {
         try {
-            const taskRef = doc(db, 'tasks', taskId);
+            const taskRef = doc(db, `users/${user.uid}/tasks`, taskId);
             await deleteDoc(taskRef);
         } catch (error) {
             console.error('Error deleting task:', error);

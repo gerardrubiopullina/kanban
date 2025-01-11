@@ -18,7 +18,7 @@ export function TasksProvider({ children }: { children: ReactNode }) {
         setIsLoading(true);
         try {
             if (user) {
-                const fetchedTasks = await tasksService.getTasks();
+                const fetchedTasks = await tasksService.getTasks(user);
                 setTasks(fetchedTasks);
             } else {
                 const savedTasks = localStorage.getItem(LOCALSTORAGE_KEY);
@@ -61,7 +61,7 @@ export function TasksProvider({ children }: { children: ReactNode }) {
 
         try {
             if (user) {
-                const id = await tasksService.addTask(newTask);
+                const id = await tasksService.addTask(user, newTask);
                 setTasks(prev => [...prev, { ...newTask, id }]);
             } else {
                 const id = getNextLocalId();
@@ -78,7 +78,7 @@ export function TasksProvider({ children }: { children: ReactNode }) {
     const moveTask = async(taskId: string, newStatus: TaskStatus) => {
         try {
             if (user) {
-                await tasksService.updateTask(taskId, { status: newStatus });
+                await tasksService.updateTask(user, taskId, { status: newStatus });
             }
             const updatedTasks = tasks.map(task =>
                 task.id === taskId
@@ -98,7 +98,7 @@ export function TasksProvider({ children }: { children: ReactNode }) {
 
         try {
             if (user) {
-                await tasksService.updateTask(taskId, { status: newStatus });
+                await tasksService.updateTask(user, taskId, { status: newStatus });
             }
             
             const newTasks = tasks.filter(t => t.id !== taskId);
@@ -121,7 +121,7 @@ export function TasksProvider({ children }: { children: ReactNode }) {
     const updateTask = async(taskId: string, title: string, description?: string) => {
         try {
             if (user) {
-                await tasksService.updateTask(taskId, { title, description });
+                await tasksService.updateTask(user, taskId, { title, description });
             }
             const updatedTasks = tasks.map(task =>
                 task.id === taskId
@@ -138,7 +138,7 @@ export function TasksProvider({ children }: { children: ReactNode }) {
     const deleteTask = async(taskId: string) => {
         try {
             if (user) {
-                await tasksService.deleteTask(taskId);
+                await tasksService.deleteTask(user, taskId);
             }
             const updatedTasks = tasks.filter(task => task.id !== taskId);
             setTasks(updatedTasks);
@@ -153,7 +153,7 @@ export function TasksProvider({ children }: { children: ReactNode }) {
         try {
             const completedTasks = tasks.filter(task => task.status === 'done');
             if (user) {
-                await Promise.all(completedTasks.map(task => tasksService.deleteTask(task.id)));
+                await Promise.all(completedTasks.map(task => tasksService.deleteTask(user, task.id)));
             }
             const updatedTasks = tasks.filter(task => task.status !== 'done');
             setTasks(updatedTasks);
