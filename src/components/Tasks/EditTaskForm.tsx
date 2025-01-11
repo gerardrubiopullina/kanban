@@ -10,7 +10,7 @@ interface EditTaskFormProps {
 }
 
 const EditTaskForm = ({ taskId, initialTitle, initialDescription = "", onClose }: EditTaskFormProps) => {
-
+    
     const languageContext = useContext(LanguageContext);
     if (!languageContext) throw new Error('Language Context not found');
     const { t } = languageContext;
@@ -21,7 +21,6 @@ const EditTaskForm = ({ taskId, initialTitle, initialDescription = "", onClose }
   
     const tasksContext = useContext(TasksContext);
     if (!tasksContext) throw new Error('Tasks Context not found');
-  
     const { updateTask } = tasksContext;
 
     const handleSubmit = async (e: React.FormEvent) => {

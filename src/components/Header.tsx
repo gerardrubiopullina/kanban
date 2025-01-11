@@ -53,7 +53,7 @@ const Header = () => {
                                 onClick={() => setShowPopup(true)}
                                 className="px-3 py-1 text-text-secondary hover:text-accent transition-colors"
                             >
-                                <span className="text-sm">Login to save your tasks</span>
+                                <span className="text-sm">{t('common.login')}</span>
                             </button>
                         </div>
                     )}

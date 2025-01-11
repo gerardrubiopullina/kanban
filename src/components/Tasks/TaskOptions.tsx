@@ -19,7 +19,6 @@ const TaskOptions = ({
     taskTitle,
     taskDescription
 }: TaskOptionsProps) => {
-
     const [showEditForm, setShowEditForm] = useState(false);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
@@ -28,7 +27,8 @@ const TaskOptions = ({
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            //don't close if clicking inside options menu or delete confirmation
+            if (showEditForm) return; // Don't handle clicks if edit form is open
+            
             if (
                 (optionsRef.current && optionsRef.current.contains(event.target as Node)) ||
                 (deleteDialogRef.current && deleteDialogRef.current.contains(event.target as Node))
@@ -41,7 +41,7 @@ const TaskOptions = ({
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, [onClose]);
+    }, [onClose, showEditForm]);
 
     if (!buttonPosition) return null;
 
@@ -70,7 +70,7 @@ const TaskOptions = ({
             }}
             className="flex flex-col p-1 gap-1 bg-background rounded-lg 
                 shadow-xl overflow-hidden z-50 border border-primary/30"
-            >
+        >
             <button
                 onClick={() => setShowEditForm(true)}
                 className="p-2 text-text-primary hover:bg-primary/30 transition-colors rounded-md"
@@ -85,20 +85,18 @@ const TaskOptions = ({
             </button>
         </div>
 
-        {
-            showDeleteDialog && (
-                <div ref={deleteDialogRef}>
-                    <DeleteConfirmation
-                        taskId={taskId}
-                        taskTitle={taskTitle}
-                        onClose={() => {
-                            setShowDeleteDialog(false);
-                            onClose();
-                        }}
-                    />
-                </div>
-            )
-        }
+        {showDeleteDialog && (
+            <div ref={deleteDialogRef}>
+                <DeleteConfirmation
+                    taskId={taskId}
+                    taskTitle={taskTitle}
+                    onClose={() => {
+                        setShowDeleteDialog(false);
+                        onClose();
+                    }}
+                />
+            </div>
+        )}
         </>
     );
 };
