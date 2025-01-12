@@ -10,7 +10,7 @@ const AlertsPanel = () => {
     const { t } = languageContext;
     
     return (
-        <div className="h-full border-l border-primary/30 p-6">
+        <div className="min-w-[300px] w-[20%] border-l border-primary/30 p-6">
             <div className="flex items-center gap-2 mb-6">
                 <Notifications className="h-5 w-5 text-accent" />
                 <h2 className="text-lg font-semibold text-text-primary">{t('alerts.title')}</h2>
