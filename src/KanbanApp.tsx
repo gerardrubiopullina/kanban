@@ -12,6 +12,8 @@ import {
 import { SortableContext } from "@dnd-kit/sortable";
 
 import { TasksContext } from "./context/TasksContext";
+import { SettingsContext } from "./context/SettingsContext";
+import { LanguageContext } from "./i18n/LanguageContext";
 import { TaskStatus } from "./types";
 
 import Column from "./components/Column";
@@ -19,8 +21,6 @@ import Header from "./components/Header";
 import TaskCard from "./components/TaskCard";
 import AlertsPanel from "./components/AlertsPanel";
 import Footer from "./components/Footer";
-import { LanguageContext } from "./i18n/LanguageContext";
-import { SettingsContext } from "./context/SettingsContext";
 
 
 function KanbanApp() {
@@ -126,19 +126,19 @@ function KanbanApp() {
     <div className="h-screen bg-background flex flex-col">
       <Header />
       <div className="flex flex-1 min-h-0 overflow-hidden">
-        <div className="flex-1 p-8 relative">
+        <div className="flex-1 p-8 relative overflow-x-auto">
           {isLoading ? (
             <div className="flex items-center justify-center h-full">
               <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent"></div>
             </div>
           ) : (
             <DndContext
-                sensors={sensors}
-                onDragStart={handleDragStart}
-                onDragOver={handleDragOver}
-                onDragEnd={handleDragEnd}
+              sensors={sensors}
+              onDragStart={handleDragStart}
+              onDragOver={handleDragOver}
+              onDragEnd={handleDragEnd}
             >
-              <div className="flex gap-6 h-full">
+              <div className="flex gap-6 h-full w-full">
                 {columns.map((column) => {
                   const columnTasks = tasks.filter(
                     (task) => task.status === column.id
