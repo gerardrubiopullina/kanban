@@ -18,6 +18,9 @@ const EditTaskForm = ({ taskId, initialTitle, initialDescription = "", onClose }
     const [title, setTitle] = useState(initialTitle);
     const [description, setDescription] = useState(initialDescription);
     const [isLoading, setIsLoading] = useState(false);
+
+    const characterLimit = 500;
+    const remainingChars = characterLimit - description.length;
   
     const tasksContext = useContext(TasksContext);
     if (!tasksContext) throw new Error('Tasks Context not found');
@@ -55,13 +58,25 @@ const EditTaskForm = ({ taskId, initialTitle, initialDescription = "", onClose }
                             />
                         </div>
                         
-                        <div>
+                        <div className="relative">
                             <textarea
                                 value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                                className="w-full px-4 py-3 bg-primary/10 rounded-xl text-text-primary placeholder:text-text-secondary/50 outline-none min-h-[180px] resize-none text-base"
-                                placeholder="Add description..."
+                                onChange={(e) => {
+                                    if (e.target.value.length <= characterLimit) {
+                                        setDescription(e.target.value);
+                                    }
+                                }}
+                                className="w-full px-4 py-3 bg-primary/10 rounded-xl text-text-primary 
+                                    placeholder:text-text-secondary/50 outline-none min-h-[180px] resize-none 
+                                    text-base whitespace-pre-wrap overflow-y-scroll scrollbar-none"
+                                placeholder={t('tasks.description')}
+                                maxLength={characterLimit}
                             />
+                            <span className={`absolute bottom-2 right-2 text-xs ${
+                                remainingChars <= 50 ? 'text-red-500' : 'text-text-secondary/50'
+                            }`}>
+                                {remainingChars}/{characterLimit}
+                            </span>
                         </div>
                     </div>
 

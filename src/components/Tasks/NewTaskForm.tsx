@@ -6,14 +6,16 @@ import { LanguageContext } from "../../i18n/LanguageContext";
 const NewTaskForm = ({ onClose }: { onClose: () => void }) => {
 
   const languageContext = useContext(LanguageContext);
-    if (!languageContext) throw new Error('Language Context not found');
-    const { t } = languageContext;
+  if (!languageContext) throw new Error('Language Context not found');
+  const { t } = languageContext;
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
+  const characterLimit = 500;
+  const remainingChars = characterLimit - description.length;
   
   const tasksContext = useContext(TasksContext);
   if (!tasksContext) throw new Error('Tasks Context not found');
@@ -62,14 +64,26 @@ const NewTaskForm = ({ onClose }: { onClose: () => void }) => {
               />
             </div>
             
-            <div>
+            <div className="relative">
               <textarea
                 ref={descriptionRef}
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="w-full px-4 py-3 bg-primary/10 rounded-xl text-text-primary placeholder:text-text-secondary/50 outline-none min-h-[180px] resize-none text-base whitespace-pre-wrap"
+                onChange={(e) => {
+                  if (e.target.value.length <= characterLimit) {
+                    setDescription(e.target.value);
+                  }
+                }}
+                className="w-full px-4 py-3 bg-primary/10 rounded-xl text-text-primary 
+                  placeholder:text-text-secondary/50 outline-none min-h-[180px] resize-none 
+                  text-base whitespace-pre-wrap overflow-y-scroll scrollbar-none"
                 placeholder={t('tasks.description')}
+                maxLength={characterLimit}
               />
+              <span className={`absolute bottom-3 right-3 text-xs ${
+                remainingChars <= 20 ? 'text-red-500' : 'text-text-secondary/50'
+              }`}>
+                {remainingChars}/{characterLimit}
+              </span>
             </div>
           </div>
 
