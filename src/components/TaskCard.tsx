@@ -4,7 +4,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { MoreVert } from "@mui/icons-material";
 
-import TaskOptions from "./tasks/TaskOptions";
+import TaskOptions from "../components/tasks/TaskOptions";
 import { SettingsContext } from "../context/SettingsContext";
 
 interface TaskCardProps {
