@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Edit, Delete } from "@mui/icons-material";
 
-import DeleteConfirmation from './DeleteConfirmation';
+import { DeleteConfirmation } from './DeleteConfirmation';
 import EditTaskForm from './EditTaskForm';
 
 interface TaskOptionsProps {
@@ -12,7 +12,7 @@ interface TaskOptionsProps {
     taskDescription?: string;
 }
 
-const TaskOptions = ({ 
+export const TaskOptions = ({ 
     onClose, 
     buttonPosition,
     taskId,
@@ -100,5 +100,3 @@ const TaskOptions = ({
         </>
     );
 };
-
-export default TaskOptions;

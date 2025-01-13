@@ -9,7 +9,7 @@ interface DeleteConfirmationProps {
     customDeleteHandler?: () => Promise<void>;
 }
 
-const DeleteConfirmation = ({ taskId, taskTitle, onClose, customDeleteHandler }: DeleteConfirmationProps) => {
+export const DeleteConfirmation = ({ taskId, taskTitle, onClose, customDeleteHandler }: DeleteConfirmationProps) => {
 
     const languageContext = useContext(LanguageContext);
     if (!languageContext) throw new Error('Language Context not found');
@@ -89,5 +89,3 @@ const DeleteConfirmation = ({ taskId, taskTitle, onClose, customDeleteHandler }:
         </div>
     );
 };
-
-export default DeleteConfirmation;

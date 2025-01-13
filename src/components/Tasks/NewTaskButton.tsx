@@ -1,10 +1,10 @@
 import { Add } from "@mui/icons-material";
-import NewTaskForm from "./NewTaskForm";
+import { NewTaskForm } from "./NewTaskForm";
 import { useContext, useState } from "react";
 import { LanguageContext } from "../../i18n/LanguageContext";
 
 
-const NewTaskButton = () => {
+export const NewTaskButton = () => {
 
     const languageContext = useContext(LanguageContext);
     if (!languageContext) throw new Error('Language Context not found');
@@ -25,5 +25,3 @@ const NewTaskButton = () => {
         </>
     );
 };
-  
-export default NewTaskButton;

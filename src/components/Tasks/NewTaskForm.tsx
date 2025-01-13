@@ -3,7 +3,7 @@ import { TasksContext } from "../../context/TasksContext";
 import { LanguageContext } from "../../i18n/LanguageContext";
 
 
-const NewTaskForm = ({ onClose }: { onClose: () => void }) => {
+export const NewTaskForm = ({ onClose }: { onClose: () => void }) => {
 
   const languageContext = useContext(LanguageContext);
   if (!languageContext) throw new Error('Language Context not found');
@@ -108,5 +108,3 @@ const NewTaskForm = ({ onClose }: { onClose: () => void }) => {
     </div>
   );
 };
-
-export default NewTaskForm;

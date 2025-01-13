@@ -5,9 +5,9 @@ import { Add, DeleteSweep } from "@mui/icons-material";
 import { TasksContext } from "../context/TasksContext";
 import { LanguageContext } from "../i18n/LanguageContext";
 
-import NewTaskButton from "./tasks/NewTaskButton";
-import NewTaskForm from "./tasks/NewTaskForm";
-import DeleteConfirmation from "./tasks/DeleteConfirmation";
+import { NewTaskButton } from "./tasks/NewTaskButton";
+import { NewTaskForm } from "./tasks/NewTaskForm";
+import { DeleteConfirmation } from "./tasks/DeleteConfirmation";
 
 
 interface ColumnProps {
