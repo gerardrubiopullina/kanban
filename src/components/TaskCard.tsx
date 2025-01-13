@@ -4,8 +4,8 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { MoreVert } from "@mui/icons-material";
 
-import TaskOptions from "../components/tasks/TaskOptions";
 import { SettingsContext } from "../context/SettingsContext";
+import TaskOptions from "./tasks/TaskOptions";
 
 interface TaskCardProps {
     id: string;
@@ -100,7 +100,7 @@ const TaskCard = ({ id, title, description }: TaskCardProps) => {
                 </div>
             )}
             {showOptions && (
-                <TaskOptions 
+                <TaskOptions
                     onClose={() => setShowOptions(false)}
                     buttonPosition={buttonPosition}
                     taskId={id}
