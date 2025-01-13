@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Edit, Delete } from "@mui/icons-material";
 
-import { DeleteConfirmation } from './DeleteConfirmation';
+import { DeleteConfirmation } from '@/components/tasks/DeleteConfirmation';
 import EditTaskForm from './EditTaskForm';
 
 interface TaskOptionsProps {

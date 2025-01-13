@@ -5,7 +5,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { MoreVert } from "@mui/icons-material";
 
 import { SettingsContext } from "../context/SettingsContext";
-import { TaskOptions } from "./tasks/TaskOptions";
+import { TaskOptions } from "@/components/tasks/TaskOptions";
 
 interface TaskCardProps {
     id: string;
