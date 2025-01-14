@@ -1,5 +1,5 @@
 import { Add } from "@mui/icons-material";
-import { NewTaskForm } from "@/components/tasks/NewTaskForm";
+import { NewTaskForm } from "@/components/taskmanager/NewTaskForm";
 import { useContext, useState } from "react";
 import { LanguageContext } from "../../i18n/LanguageContext";
 
