@@ -21,9 +21,19 @@ export const TaskOptions = ({
 }: TaskOptionsProps) => {
     const [showEditForm, setShowEditForm] = useState(false);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
     const optionsRef = useRef<HTMLDivElement>(null);
     const deleteDialogRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -65,7 +75,7 @@ export const TaskOptions = ({
             ref={optionsRef}
             style={{
                 position: 'fixed',
-                left: `${buttonPosition.x + 15}px`,
+                left: isMobile ? `${buttonPosition.x - 60}px` : `${buttonPosition.x + 15}px`,
                 top: `${buttonPosition.y - 10}px`,
             }}
             className="flex flex-col p-1 gap-1 bg-background rounded-lg 

@@ -41,7 +41,7 @@ const EditTaskForm = ({ taskId, initialTitle, initialDescription = "", onClose }
     };
 
     return (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-6">
             <div className="bg-background w-[550px] rounded-xl shadow-2xl">
                 <form onSubmit={handleSubmit} className="p-8">
                     <h2 className="text-2xl font-semibold text-text-primary mb-8">{t('tasks.editTask')}</h2>

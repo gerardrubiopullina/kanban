@@ -33,17 +33,17 @@ const Header = () => {
     return (
         <header className="bg-primary shadow-lg relative">
             <div className="px-4 h-16 flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                    <div className="h-8 w-8 rounded-lg bg-accent flex items-center justify-center">
+                <div className="flex items-center space-x-3 flex-shrink-0">
+                    <div className="h-8 w-8 rounded-lg bg-accent flex items-center justify-center flex-shrink-0">
                         <span className="text-primary font-bold text-lg">K</span>
                     </div>
-                    <h1 className="text-xl font-semibold text-text-primary">{t('ui.title')}</h1>
+                    <h1 className="text-xl font-semibold text-text-primary hidden sm:block">{t('ui.title')}</h1>
                 </div>
 
                 <div className="flex items-center gap-3">
                     {user ? (
                         <div className="flex items-center gap-3 px-4 py-1.5 bg-accent/10 rounded-full">
-                            <span className="text-accent text-sm font-medium">
+                            <span className="text-accent text-sm font-medium truncate max-w-[200px]">
                                 {user.email}
                             </span>
                         </div>

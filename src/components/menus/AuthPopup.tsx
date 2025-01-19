@@ -11,7 +11,6 @@ interface AuthPopupProps {
 }
   
 export const AuthPopup = ({ onClose }: AuthPopupProps) => {
-
     const languageContext = useContext(LanguageContext);
     if (!languageContext) throw new Error('Language Context not found');
     const { t } = languageContext;
@@ -35,18 +34,20 @@ export const AuthPopup = ({ onClose }: AuthPopupProps) => {
     return (
         <>
         <div className="absolute right-4 top-20 w-64 bg-primary/95 rounded-lg shadow-xl p-4 z-50">
-            {user ? (
-                <div className="flex flex-col">
-                    <button
-                        onClick={() => {
-                            setShowOptionsMenu(!showOptionsMenu);
-                        }}
-                        className="w-full p-2 text-text-secondary hover:bg-primary/40 rounded-lg font-medium flex items-center gap-2 transition-colors"
-                    >
-                        <Settings className="h-5 w-5" />
-                        {t('common.settings')}
-                    </button>
-                    <div className="my-2 border-t border-text-primary/30"></div>
+            <div className="flex flex-col">
+                <button
+                    onClick={() => {
+                        setShowOptionsMenu(!showOptionsMenu);
+                    }}
+                    className="w-full p-2 text-text-secondary hover:bg-primary/40 rounded-lg font-medium flex items-center gap-2 transition-colors"
+                >
+                    <Settings className="h-5 w-5" />
+                    {t('common.settings')}
+                </button>
+
+                <div className="my-2 border-t border-text-primary/30"></div>
+
+                {user ? (
                     <button
                         onClick={() => {
                             authService.signOut();
@@ -57,20 +58,20 @@ export const AuthPopup = ({ onClose }: AuthPopupProps) => {
                         <Logout className="h-5 w-5" />
                         {t('common.signOut')}
                     </button>
-                </div>
-            ) : (
-                <>
-                    <h2 className="text-sm font-medium text-text-secondary mb-3">{t('common.signIn')}</h2>
-                    <button
-                        onClick={handleGoogleSignIn}
-                        disabled={isLoading}
-                        className="w-full p-2 bg-accent/10 text-accent hover:bg-accent/20 rounded-lg font-medium flex items-center gap-2 transition-colors disabled:opacity-50"
-                    >
-                        <Google className="h-5 w-5" />
-                        Google
-                    </button>
-                </>
-            )}
+                ) : (
+                    <>
+                        <h2 className="text-sm font-medium text-text-secondary mb-3">{t('common.signIn')}</h2>
+                        <button
+                            onClick={handleGoogleSignIn}
+                            disabled={isLoading}
+                            className="w-full p-2 bg-accent/10 text-accent hover:bg-accent/20 rounded-lg font-medium flex items-center gap-2 transition-colors disabled:opacity-50"
+                        >
+                            <Google className="h-5 w-5" />
+                            Google
+                        </button>
+                    </>
+                )}
+            </div>
         </div>
         {showOptionsMenu && 
             <OptionsMenu 

@@ -15,10 +15,21 @@ const OptionsMenu = ({ returnToAuth }: OptionsMenuProps) => {
 
     const languageContext = useContext(LanguageContext);
     if (!languageContext) throw new Error('Language Context not found');
-    const { t } = languageContext;
+    const { t, language } = languageContext;
 
     const [showLanguageMenu, setShowLanguageMenu] = useState(false);
     const [showColumnsMenu, setShowColumnsMenu] = useState(false);
+
+    const getLanguageDisplay = (lang: string) => {
+        switch(lang) {
+            case 'en':
+                return 'English';
+            case 'es':
+                return 'Español';
+            default:
+                return 'English';
+        }
+    };
 
     if (showLanguageMenu) {
         return <LanguageMenu onBack={() => setShowLanguageMenu(false)} />;
@@ -40,7 +51,7 @@ const OptionsMenu = ({ returnToAuth }: OptionsMenuProps) => {
                         <Language className="h-5 w-5" />
                         <span>{t('common.language')}</span>
                     </div>
-                    <span className="text-sm text-text-secondary/50">English</span>
+                    <span className="text-sm text-text-secondary/50">{getLanguageDisplay(language)}</span>
                 </button>
                 
                 <button

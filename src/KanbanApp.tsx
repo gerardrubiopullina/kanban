@@ -21,10 +21,9 @@ import Header from "./components/Header";
 import TaskCard from "./components/TaskCard";
 import AlertsPanel from "./components/AlertsPanel";
 import Footer from "./components/Footer";
-
+import { Notifications } from "@mui/icons-material";
 
 function KanbanApp() {
-
   const languageContext = useContext(LanguageContext);
   if (!languageContext) throw new Error('Language Context not found');
   const { t } = languageContext;
@@ -38,6 +37,7 @@ function KanbanApp() {
   const { showReview } = settingsContext;
 
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [showAlertsPanel, setShowAlertsPanel] = useState(false);
 
   const columns: { id: TaskStatus; title: string }[] = [
     { id: "todo" as TaskStatus, title: t('columns.todo') },
@@ -59,7 +59,6 @@ function KanbanApp() {
   };
 
   const handleDragOver = (event: DragOverEvent) => {
-
     const { active, over } = event;
     if (!over) return;
 
@@ -125,8 +124,18 @@ function KanbanApp() {
   return (
     <div className="h-screen bg-background flex flex-col">
       <Header />
-      <div className="flex flex-1 min-h-0 overflow-hidden">
-        <div className="flex-1 p-8 relative overflow-x-auto">
+      <div className="flex-1 flex flex-col md:flex-row relative overflow-hidden">
+        {/* mobile alerts toggle */}
+        <button
+          onClick={() => setShowAlertsPanel(!showAlertsPanel)}
+          className="md:hidden fixed bottom-4 right-4 z-50 bg-accent text-white p-3 rounded-full shadow-lg"
+          aria-label="Toggle Alerts"
+        >
+          <Notifications className="h-6 w-6" />
+        </button>
+
+        {/* Main Content */}
+        <div className="flex-1 pl-4 pr-2 md:pl-8 md:pr-4 py-4 md:py-8 overflow-hidden">
           {isLoading ? (
             <div className="flex items-center justify-center h-full">
               <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent"></div>
@@ -138,7 +147,7 @@ function KanbanApp() {
               onDragOver={handleDragOver}
               onDragEnd={handleDragEnd}
             >
-              <div className="flex gap-6 h-full w-full">
+              <div className="h-full flex md:flex-row flex-col md:gap-6 gap-4 md:overflow-x-auto overflow-y-auto">
                 {columns.map((column) => {
                   const columnTasks = tasks.filter(
                     (task) => task.status === column.id
@@ -177,7 +186,16 @@ function KanbanApp() {
             </DndContext>
           )}
         </div>
-        <AlertsPanel />
+
+        {/* Alerts Panel */}
+        <div className={`
+          fixed md:relative top-0 right-0 h-full w-4/5 md:w-[360px]
+          transform transition-transform duration-300 ease-in-out
+          ${showAlertsPanel ? 'translate-x-0' : 'translate-x-full md:translate-x-0'}
+          bg-background md:bg-transparent z-40 md:z-auto md:px-4
+        `}>
+          <AlertsPanel onClose={() => setShowAlertsPanel(false)} />
+        </div>
       </div>
       <Footer />
     </div>
