@@ -56,7 +56,8 @@ export function TasksProvider({ children }: { children: ReactNode }) {
         const newTask = {
             title,
             description,
-            status: 'todo' as TaskStatus
+            status: 'todo' as TaskStatus,
+            statusUpdatedAt: new Date().toISOString()
         };
 
         try {
@@ -75,14 +76,17 @@ export function TasksProvider({ children }: { children: ReactNode }) {
         }
     };
 
-    const moveTask = async(taskId: string, newStatus: TaskStatus) => {
+    const moveTask = async(taskId: string, status: TaskStatus) => {
         try {
             if (user) {
-                await tasksService.updateTask(user, taskId, { status: newStatus });
+                await tasksService.updateTask(user, taskId, { 
+                    status,
+                    statusUpdatedAt: new Date().toISOString() 
+                });
             }
             const updatedTasks = tasks.map(task =>
                 task.id === taskId
-                    ? { ...task, status: newStatus }
+                    ? { ...task, status, statusUpdatedAt: new Date().toISOString() }
                     : task
             );
             setTasks(updatedTasks);

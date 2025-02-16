@@ -40,7 +40,11 @@ export const tasksService = {
     async updateTask(user: User, taskId: string, updates: Partial<Task>) {
         try {
             const taskRef = doc(db, `users/${user.uid}/tasks`, taskId);
-            await updateDoc(taskRef, updates);
+            const updatedFields = {
+                ...updates,
+                ...(updates.status && { statusUpdatedAt: new Date().toISOString() })
+            };
+            await updateDoc(taskRef, updatedFields);
         } catch (error) {
             console.error('Error updating task:', error);
             throw error;
