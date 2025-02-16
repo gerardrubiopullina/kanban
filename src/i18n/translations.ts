@@ -39,7 +39,10 @@ export const translations = {
         alerts: {
             title: "Alerts",
             noAlerts: "No alerts yet",
-            willAppear: "Important notifications will appear here"
+            willAppear: "Important notifications will appear here",
+            stagnantTasks: "Stagnant tasks",
+            hasBeen: "Stuck at",
+            days: "days"
         },
         ui: {
             title: "Daily Tasks",
@@ -49,6 +52,10 @@ export const translations = {
             showReview: "Show reviewing",
             hideDesc: "Show description",
             cannotHideReviewing: "Can not hide a column with active tasks",
+            thresholdSettings: "Stagnant Task Settings",
+            stagnantTasksSettings: "Days before a task is considered stagnant",
+            resetThresholds: "Reset to defaults",
+            stagnantSettings: "Stagnant Tasks",
         }
     },
     es: {
@@ -89,7 +96,10 @@ export const translations = {
         alerts: {
             title: "Alertas",
             noAlerts: "No hay alertas",
-            willAppear: "Las notificaciones importantes aparecerán aquí"
+            willAppear: "Las notificaciones importantes aparecerán aquí",
+            stagnantTasks: "Tareas estancadas",
+            hasBeen: "Marcada como",
+            days: "días"
         },
         ui: {
             title: "Tareas Diarias",
@@ -99,6 +109,10 @@ export const translations = {
             showReview: "Mostrar revisando",
             hideDesc: "Mostrar descripción",
             cannotHideReviewing: "No se puede esconder una columna con tareas activas",
+            thresholdSettings: "Opciones de Treas Estancadas",
+            stagnantTasksSettings: "¿Cuando se considera una tarea como estancada?",
+            resetThresholds: "Valores por defecto",
+            stagnantSettings: "Tareas Estancadas",
         }
     }
 };
