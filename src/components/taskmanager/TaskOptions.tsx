@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Edit, Delete } from "@mui/icons-material";
 
 import { DeleteConfirmation } from '@/components/taskmanager/DeleteConfirmation';
@@ -56,7 +57,7 @@ export const TaskOptions = ({
     if (!buttonPosition) return null;
 
     if (showEditForm) {
-        return (
+        return createPortal(
             <EditTaskForm
                 taskId={taskId}
                 initialTitle={taskTitle}
@@ -65,11 +66,12 @@ export const TaskOptions = ({
                     setShowEditForm(false);
                     onClose();
                 }}
-            />
+            />,
+            document.body
         );
     }
 
-    return (
+    return createPortal(
         <>
         <div 
             ref={optionsRef}
@@ -107,6 +109,7 @@ export const TaskOptions = ({
                 />
             </div>
         )}
-        </>
+        </>,
+        document.body
     );
 };

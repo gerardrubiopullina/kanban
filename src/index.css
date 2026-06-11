@@ -212,8 +212,92 @@
 
 .task-card {
   background-color: rgb(var(--color-surface-soft));
+  transition: background-color 150ms ease, transform 150ms ease, box-shadow 150ms ease;
 }
 
 .task-card:hover {
   background-color: rgb(var(--color-surface-hover));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .task-card:hover {
+    transform: none;
+  }
+}
+
+:root {
+  --color-alert-critical: 220 38 38;
+}
+
+:root[data-theme='dark'] {
+  --color-alert-critical: 248 113 113;
+}
+
+.alert-row {
+  transition: background-color 150ms ease;
+  animation: alert-row-in 220ms ease-out both;
+}
+
+.alert-row:hover {
+  background-color: rgb(var(--color-surface-soft));
+}
+
+@keyframes alert-row-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.alert-row-icon {
+  background-color: rgb(var(--color-surface-muted));
+  color: rgb(var(--color-text-secondary));
+}
+
+.alert-row-icon-critical {
+  background-color: rgb(var(--color-alert-critical) / 0.12);
+  color: rgb(var(--color-alert-critical));
+}
+
+.alert-days-critical {
+  color: rgb(var(--color-alert-critical));
+}
+
+.alert-status-chip {
+  color: rgb(var(--color-text-secondary));
+  background-color: rgb(var(--color-surface-muted));
+  border: 1px solid rgb(var(--color-border-soft));
+}
+
+.alerts-empty-state {
+  animation: alerts-fade-in 300ms ease-out both;
+}
+
+@keyframes alerts-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.empty-alerts-icon {
+  background-color: rgb(var(--color-accent) / 0.08);
+  color: rgb(var(--color-accent) / 0.55);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .alert-row,
+  .alerts-empty-state {
+    animation: none;
+  }
 }

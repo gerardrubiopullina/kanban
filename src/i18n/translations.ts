@@ -39,8 +39,8 @@ export const translations = {
         },
         alerts: {
             title: "Alerts",
-            noAlerts: "No alerts yet",
-            willAppear: "Important notifications will appear here",
+            noAlerts: "All caught up!",
+            willAppear: "Tasks that stay too long in the same column will show up here",
             stagnantTasks: "Stagnant tasks",
             hasBeen: "Stuck at",
             days: "days"
@@ -100,10 +100,10 @@ export const translations = {
         },
         alerts: {
             title: "Alertas",
-            noAlerts: "No hay alertas",
-            willAppear: "Las notificaciones importantes aparecerán aquí",
+            noAlerts: "¡Todo al día!",
+            willAppear: "Las tareas que pasen demasiado tiempo en la misma columna aparecerán aquí",
             stagnantTasks: "Tareas estancadas",
-            hasBeen: "Marcada como",
+            hasBeen: "Estancada en",
             days: "días"
         },
         ui: {
@@ -114,7 +114,7 @@ export const translations = {
             showReview: "Mostrar revisando",
             hideDesc: "Mostrar descripción",
             cannotHideReviewing: "No se puede esconder una columna con tareas activas",
-            thresholdSettings: "Opciones de Treas Estancadas",
+            thresholdSettings: "Opciones de Tareas Estancadas",
             stagnantTasksSettings: "¿Cuando se considera una tarea como estancada?",
             resetThresholds: "Valores por defecto",
             stagnantSettings: "Tareas Estancadas",

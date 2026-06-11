@@ -100,16 +100,20 @@ export function TasksProvider({ children }: { children: ReactNode }) {
         const taskToMove = tasks.find(t => t.id === taskId);
         if (!taskToMove) return;
 
+        const statusChanged = taskToMove.status !== newStatus;
+
         try {
-            if (user) {
+            if (user && statusChanged) {
                 await tasksService.updateTask(user, taskId, { status: newStatus });
             }
             
             const newTasks = tasks.filter(t => t.id !== taskId);
             const targetStatusTasks = newTasks.filter(t => t.status === newStatus);
             
-            taskToMove.status = newStatus;
-            targetStatusTasks.splice(newIndex, 0, taskToMove);
+            const movedTask = statusChanged
+                ? { ...taskToMove, status: newStatus, statusUpdatedAt: new Date().toISOString() }
+                : taskToMove;
+            targetStatusTasks.splice(newIndex, 0, movedTask);
             
             const updatedTasks = [
                 ...newTasks.filter(t => t.status !== newStatus),
