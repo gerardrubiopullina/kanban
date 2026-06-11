@@ -13,7 +13,8 @@ export const tasksService = {
                 id: doc.id,
                 title: doc.data().title,
                 description: doc.data().description,
-                status: doc.data().status
+                status: doc.data().status,
+                statusUpdatedAt: doc.data().statusUpdatedAt ?? doc.data().createdAt ?? new Date().toISOString()
             } as Task));
         } catch (error) {
             console.error('Error fetching tasks:', error);
@@ -28,7 +29,8 @@ export const tasksService = {
                 title: task.title,
                 description: task.description,
                 status: task.status,
-                createdAt: new Date().toISOString()
+                createdAt: new Date().toISOString(),
+                statusUpdatedAt: task.statusUpdatedAt ?? new Date().toISOString()
             });
             return docRef.id;
         } catch (error) {
