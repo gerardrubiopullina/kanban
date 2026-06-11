@@ -6,13 +6,214 @@
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   margin: 0;
   padding: 0;
+  color-scheme: light;
+  --color-primary: 255 255 255;
+  --color-background: 236 238 241;
+  --color-accent: 14 116 144;
+  --color-text-primary: 20 27 40;
+  --color-text-secondary: 82 95 114;
+  --color-surface-soft: 248 249 250;
+  --color-surface-muted: 229 231 235;
+  --color-surface-hover: 244 245 247;
+  --color-border-soft: 209 213 219;
+  --color-action-text: 255 255 255;
+}
 
-  /* color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --color-primary: 24 26 31;
+  --color-background: 12 13 17;
+  --color-accent: 56 189 248;
+  --color-text-primary: 244 246 248;
+  --color-text-secondary: 178 186 197;
+  --color-surface-soft: 31 34 41;
+  --color-surface-muted: 39 43 51;
+  --color-surface-hover: 47 52 61;
+  --color-border-soft: 67 74 86;
+  --color-action-text: 12 13 17;
+}
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale; */
+.bg-background {
+  background-color: rgb(var(--color-background));
+}
+
+.bg-primary {
+  background-color: rgb(var(--color-primary));
+}
+
+.bg-primary\/95 {
+  background-color: rgb(var(--color-primary) / 0.95);
+}
+
+.bg-primary\/40,
+.hover\:bg-primary\/40:hover {
+  background-color: rgb(var(--color-surface-hover));
+}
+
+.bg-primary\/30,
+.hover\:bg-primary\/30:hover {
+  background-color: rgb(var(--color-surface-soft));
+}
+
+.bg-primary\/20,
+.hover\:bg-primary\/20:hover {
+  background-color: rgb(var(--color-surface-muted));
+}
+
+.bg-primary\/10 {
+  background-color: rgb(var(--color-surface-soft));
+}
+
+.bg-accent {
+  background-color: rgb(var(--color-accent));
+}
+
+.bg-accent\/10,
+.hover\:bg-accent\/10:hover {
+  background-color: rgb(var(--color-accent) / 0.1);
+}
+
+.hover\:bg-accent\/20:hover {
+  background-color: rgb(var(--color-accent) / 0.2);
+}
+
+.hover\:bg-accent\/90:hover {
+  background-color: rgb(var(--color-accent) / 0.9);
+}
+
+.text-background {
+  color: rgb(var(--color-background));
+}
+
+.text-accent,
+.hover\:text-accent:hover {
+  color: rgb(var(--color-accent));
+}
+
+.hover\:text-accent\/80:hover {
+  color: rgb(var(--color-accent) / 0.8);
+}
+
+.text-text-primary,
+.hover\:text-text-primary:hover {
+  color: rgb(var(--color-text-primary));
+}
+
+.text-text-secondary {
+  color: rgb(var(--color-text-secondary));
+}
+
+.text-text-secondary\/70 {
+  color: rgb(var(--color-text-secondary) / 0.7);
+}
+
+.text-text-secondary\/50 {
+  color: rgb(var(--color-text-secondary) / 0.5);
+}
+
+.text-text-secondary\/30 {
+  color: rgb(var(--color-text-secondary) / 0.3);
+}
+
+.group:hover .group-hover\:text-text-secondary\/50 {
+  color: rgb(var(--color-text-secondary) / 0.5);
+}
+
+.group:hover .group-hover\:text-text-secondary {
+  color: rgb(var(--color-text-secondary));
+}
+
+.border-primary\/30 {
+  border-color: rgb(var(--color-border-soft));
+}
+
+.border-text-primary\/30 {
+  border-color: rgb(var(--color-text-primary) / 0.3);
+}
+
+.border-accent {
+  border-color: rgb(var(--color-accent));
+}
+
+.placeholder\:text-text-secondary\/50::placeholder {
+  color: rgb(var(--color-text-secondary) / 0.5);
+}
+
+.group:hover .group-hover\:bg-accent\/50 {
+  background-color: rgb(var(--color-accent) / 0.5);
+}
+
+.menu-header {
+  color: rgb(var(--color-text-primary));
+  border-bottom: 1px solid rgb(var(--color-border-soft));
+}
+
+.menu-header:hover {
+  background-color: rgb(var(--color-surface-hover));
+}
+
+.menu-icon-button:hover {
+  color: rgb(var(--color-text-primary));
+  background-color: rgb(var(--color-surface-hover));
+}
+
+.empty-state-button {
+  color: rgb(var(--color-text-secondary));
+  border: 1px solid transparent;
+}
+
+.empty-state-button:hover {
+  color: rgb(var(--color-text-primary));
+  background-color: rgb(var(--color-surface-hover));
+  border-color: rgb(var(--color-border-soft));
+}
+
+.form-panel {
+  background-color: rgb(var(--color-primary));
+  border: 1px solid rgb(var(--color-border-soft));
+}
+
+.form-field {
+  background-color: rgb(var(--color-surface-soft));
+  border: 1px solid rgb(var(--color-border-soft));
+}
+
+.form-field:focus {
+  border-color: rgb(var(--color-accent));
+  box-shadow: 0 0 0 3px rgb(var(--color-accent) / 0.12);
+}
+
+.form-text-input {
+  border-bottom-color: rgb(var(--color-border-soft));
+}
+
+.form-text-input:focus {
+  border-bottom-color: rgb(var(--color-accent));
+}
+
+.action-button {
+  color: rgb(var(--color-action-text));
+}
+
+.secondary-action:hover {
+  color: rgb(var(--color-text-primary));
+  background-color: rgb(var(--color-surface-hover));
+}
+
+.footer-icon-link {
+  color: rgb(var(--color-text-secondary));
+  border-radius: 9999px;
+}
+
+.footer-icon-link:hover {
+  color: rgb(var(--color-accent));
+  background-color: rgb(var(--color-surface-hover));
+}
+
+.task-card {
+  background-color: rgb(var(--color-surface-soft));
+}
+
+.task-card:hover {
+  background-color: rgb(var(--color-surface-hover));
 }

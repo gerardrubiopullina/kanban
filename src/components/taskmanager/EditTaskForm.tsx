@@ -42,7 +42,7 @@ const EditTaskForm = ({ taskId, initialTitle, initialDescription = "", onClose }
 
     return (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-6">
-            <div className="bg-background w-[550px] rounded-xl shadow-2xl">
+            <div className="form-panel w-[550px] rounded-xl shadow-2xl">
                 <form onSubmit={handleSubmit} className="p-8">
                     <h2 className="text-2xl font-semibold text-text-primary mb-8">{t('tasks.editTask')}</h2>
 
@@ -52,7 +52,7 @@ const EditTaskForm = ({ taskId, initialTitle, initialDescription = "", onClose }
                                 type="text"
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
-                                className="w-full px-0 py-2 bg-transparent border-b-2 border-primary/30 text-text-primary placeholder:text-text-secondary/50 text-lg outline-none focus:border-accent transition-colors"
+                                className="form-text-input w-full px-0 py-2 bg-transparent border-b-2 text-text-primary placeholder:text-text-secondary/50 text-lg outline-none transition-colors"
                                 placeholder="Task title"
                                 required
                             />
@@ -66,7 +66,7 @@ const EditTaskForm = ({ taskId, initialTitle, initialDescription = "", onClose }
                                         setDescription(e.target.value);
                                     }
                                 }}
-                                className="w-full px-4 py-3 bg-primary/10 rounded-xl text-text-primary 
+                                className="form-field w-full px-4 py-3 rounded-xl text-text-primary 
                                     placeholder:text-text-secondary/50 outline-none min-h-[180px] resize-none 
                                     text-base whitespace-pre-wrap overflow-y-scroll scrollbar-none"
                                 placeholder={t('tasks.description')}
@@ -84,14 +84,14 @@ const EditTaskForm = ({ taskId, initialTitle, initialDescription = "", onClose }
                         <button
                             type="button"
                             onClick={onClose}
-                            className="px-6 py-2.5 text-text-secondary hover:text-text-primary transition-colors font-medium"
+                            className="secondary-action px-6 py-2.5 text-text-secondary rounded-lg transition-colors font-medium"
                         >
                             {t('common.cancel')}
                         </button>
                         <button
                             type="submit"
                             disabled={isLoading || !title.trim()}
-                            className="px-6 py-2.5 bg-accent text-primary rounded-lg hover:bg-accent/90 transition-colors disabled:opacity-50 font-medium"
+                            className="action-button px-6 py-2.5 bg-accent rounded-lg hover:bg-accent/90 transition-colors disabled:opacity-50 font-medium"
                         >
                             {t('common.save')}
                         </button>

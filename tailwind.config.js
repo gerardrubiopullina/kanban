@@ -9,12 +9,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#4C1D95',    
-        background: '#2E1065', 
-        accent: '#34D399',
+        primary: 'rgb(var(--color-primary) / <alpha-value>)',
+        background: 'rgb(var(--color-background) / <alpha-value>)',
+        accent: 'rgb(var(--color-accent) / <alpha-value>)',
         text: {
-          primary: '#FFFFFF',
-          secondary: '#D1FAE5'
+          primary: 'rgb(var(--color-text-primary) / <alpha-value>)',
+          secondary: 'rgb(var(--color-text-secondary) / <alpha-value>)'
         }
       }
     },

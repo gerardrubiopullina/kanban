@@ -41,7 +41,7 @@ const ThresholdMenu = ({ onBack }: ThresholdMenuProps) => {
                     </h3>
                     <button
                         onClick={resetThresholds}
-                        className="p-2 text-text-secondary hover:text-text-primary rounded-full transition-colors"
+                        className="menu-icon-button p-2 text-text-secondary rounded-full transition-colors"
                         title={t('ui.resetThresholds')}
                     >
                         <Refresh className="h-5 w-5" />
@@ -59,7 +59,7 @@ const ThresholdMenu = ({ onBack }: ThresholdMenuProps) => {
                             <div className="flex items-center h-12 rounded-lg bg-primary/10 overflow-hidden">
                                 <button
                                     onClick={() => handleDecrement(status)}
-                                    className="h-full px-4 text-text-secondary hover:text-text-primary hover:bg-primary/20 
+                                    className="h-full px-4 text-text-secondary menu-icon-button
                                         transition-colors flex items-center"
                                     disabled={thresholds[status] === 0}
                                 >
@@ -77,7 +77,7 @@ const ThresholdMenu = ({ onBack }: ThresholdMenuProps) => {
 
                                 <button
                                     onClick={() => handleIncrement(status)}
-                                    className="h-full px-4 text-text-secondary hover:text-text-primary hover:bg-primary/20 
+                                    className="h-full px-4 text-text-secondary menu-icon-button
                                         transition-colors flex items-center"
                                     disabled={thresholds[status] === 30}
                                 >

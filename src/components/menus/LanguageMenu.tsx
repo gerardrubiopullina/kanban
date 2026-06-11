@@ -37,8 +37,7 @@ const LanguageMenu = ({ onBack }: LanguageMenuProps) => {
                 
                 <button 
                     onClick={() => setLanguage('es')}
-                    className="w-full p-4 text-text-secondary hover:bg-primary/40 rounded-lg 
-                        transition-colors flex items-center justify-between group"
+                    className="w-full p-4 text-text-secondary hover:bg-primary/40 rounded-lg transition-colors flex items-center justify-between group"
                 >
                     <div className="flex items-center gap-3">
                         <Flag code="Es" className="w-6 h-6 rounded" />

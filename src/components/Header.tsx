@@ -35,7 +35,7 @@ const Header = () => {
             <div className="px-4 h-16 flex items-center justify-between">
                 <div className="flex items-center space-x-3 flex-shrink-0">
                     <div className="h-8 w-8 rounded-lg bg-accent flex items-center justify-center flex-shrink-0">
-                        <span className="text-primary font-bold text-lg">K</span>
+                        <span className="text-background font-bold text-lg">K</span>
                     </div>
                     <h1 className="text-xl font-semibold text-text-primary hidden sm:block">{t('ui.title')}</h1>
                 </div>
@@ -60,7 +60,7 @@ const Header = () => {
                     <button 
                         ref={buttonRef}
                         onClick={() => setShowPopup(!showPopup)}
-                        className="p-2 rounded-full hover:bg-primary/40"
+                        className="menu-icon-button p-2 rounded-full transition-colors"
                     >
                         <Person className="h-5 w-5 text-accent hover:text-accent/80 transition-colors" />
                     </button>

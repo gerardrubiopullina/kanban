@@ -76,8 +76,8 @@ const TaskCard = ({ id, title, description }: TaskCardProps) => {
             style={style as React.CSSProperties}
             {...attributes}
             {...listeners}
-            className={`bg-primary/30 rounded-lg p-4 mb-3 group 
-                hover:bg-primary/40 transition-colors cursor-grab 
+            className={`task-card rounded-lg p-4 mb-3 group 
+                transition-colors cursor-grab 
                 active:cursor-grabbing select-none touch-none
                 ${isDragging ? 'opacity-50 shadow-lg z-50' : ''}
             `}
@@ -87,7 +87,7 @@ const TaskCard = ({ id, title, description }: TaskCardProps) => {
                 <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button 
                         ref={buttonRef}
-                        className="p-1 hover:bg-primary/40 rounded"
+                        className="menu-icon-button p-1 rounded transition-colors"
                         onClick={handleOptionsClick}
                     >
                         <MoreVert className="h-3 w-3 text-text-secondary"/>

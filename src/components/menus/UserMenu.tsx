@@ -27,7 +27,7 @@ export const UserMenu = () => {
                     <span className="ml-2 text-text-primary">{user.displayName}</span>
                     <button 
                         onClick={() => authService.signOut()}
-                        className="p-2 hover:bg-primary/40 rounded-full"
+                        className="menu-icon-button p-2 rounded-full transition-colors"
                     >
                         <Logout className="h-5 w-5 text-text-secondary" />
                     </button>
@@ -37,7 +37,7 @@ export const UserMenu = () => {
                     <span className="text-white">{t('common.login')}</span>
                     <button 
                         onClick={() => setShowPopup(true)}
-                        className="p-2 hover:bg-primary/40 rounded-full"
+                        className="menu-icon-button p-2 rounded-full transition-colors"
                     >
                         <Login className="h-5 w-5 text-text-secondary" />
                     </button>
