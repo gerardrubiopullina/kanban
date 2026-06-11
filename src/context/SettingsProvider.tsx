@@ -1,7 +1,7 @@
 import { ReactNode, useContext, useState, useEffect } from "react";
 import { SettingsContext } from "./SettingsContext";
 import { TasksContext } from "./TasksContext";
-import { TaskStatus } from "../types";
+import { TaskStatus, ThemeMode } from "../types";
 
 interface ThresholdSettings {
     todo: number;
@@ -18,12 +18,19 @@ const DEFAULT_THRESHOLDS: ThresholdSettings = {
 };
 
 const THRESHOLD_STORAGE_KEY = 'kanban_thresholds';
+const THEME_STORAGE_KEY = 'kanban_theme';
+
+const getSavedTheme = (): ThemeMode => {
+    const saved = localStorage.getItem(THEME_STORAGE_KEY);
+    return saved === 'dark' || saved === 'light' ? saved : 'light';
+};
 
 export const SettingsProvider = ({ children }: { children: ReactNode }) => {
 
     const [showReview, setShowReview] = useState(true);
     const [showDescriptions, setShowDescriptions] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [theme, setTheme] = useState<ThemeMode>(getSavedTheme);
     const [thresholds, setThresholds] = useState<ThresholdSettings>(() => {
         const saved = localStorage.getItem(THRESHOLD_STORAGE_KEY);
         return saved ? JSON.parse(saved) : DEFAULT_THRESHOLDS;
@@ -36,6 +43,11 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         localStorage.setItem(THRESHOLD_STORAGE_KEY, JSON.stringify(thresholds));
     }, [thresholds]);
+
+    useEffect(() => {
+        document.documentElement.dataset.theme = theme;
+        localStorage.setItem(THEME_STORAGE_KEY, theme);
+    }, [theme]);
 
     const toggleReviewColumn = () => {
         const hasReviewingTasks = tasks.some(task => task.status === 'reviewing');
@@ -64,8 +76,10 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
             showDescriptions,
             error,
             thresholds,
+            theme,
             setError,
             setShowDescriptions,
+            setTheme,
             toggleReviewColumn,
             updateThreshold,
             resetThresholds

@@ -19,14 +19,14 @@ const Footer = () => {
                 <div className="flex gap-4">
                     <a 
                         href="https://github.com/gerardrubiopullina"
-                        className="text-text-secondary hover:text-text-primary transition-colors"
+                        className="footer-icon-link p-2 transition-colors"
                         target="_blank"
                     >
                         <GitHub className="w-5 h-5" />
                     </a>
                     <a
                         href="https://www.linkedin.com/in/gerard-rubi%C3%B3-pullina-a88992243/" 
-                        className="text-text-secondary hover:text-text-primary transition-colors"
+                        className="footer-icon-link p-2 transition-colors"
                         target="_blank"
                     >
                         <LinkedIn className="w-5 h-5" />

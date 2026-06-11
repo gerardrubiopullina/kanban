@@ -9,6 +9,7 @@ export const translations = {
             settings: "Settings",
             language: "Language",
             columns: "Columns",
+            theme: "Theme",
             cancel: "Cancel",
             save: "Save",
             create: "Create",
@@ -56,6 +57,9 @@ export const translations = {
             stagnantTasksSettings: "Days before a task is considered stagnant",
             resetThresholds: "Reset to defaults",
             stagnantSettings: "Stagnant Tasks",
+            themeSettings: "Theme settings",
+            lightTheme: "Light",
+            darkTheme: "Dark",
         }
     },
     es: {
@@ -66,6 +70,7 @@ export const translations = {
             settings: "Configuración",
             language: "Idioma",
             columns: "Columnas",
+            theme: "Tema",
             cancel: "Cancelar",
             save: "Guardar",
             create: "Crear",
@@ -113,6 +118,9 @@ export const translations = {
             stagnantTasksSettings: "¿Cuando se considera una tarea como estancada?",
             resetThresholds: "Valores por defecto",
             stagnantSettings: "Tareas Estancadas",
+            themeSettings: "Apariencia",
+            lightTheme: "Claro",
+            darkTheme: "Oscuro",
         }
     }
 };

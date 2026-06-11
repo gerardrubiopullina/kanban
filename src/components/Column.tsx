@@ -80,7 +80,7 @@ const Column = ({ title, droppableId, children, count }: ColumnProps) => {
                     <div className="h-full flex items-center justify-center">
                         <button 
                             onClick={() => setShowModal(true)}
-                            className="flex flex-col items-center gap-2 p-6 rounded-xl hover:bg-primary/20 transition-colors group"
+                            className="empty-state-button flex flex-col items-center gap-2 p-6 rounded-xl transition-colors group"
                         >
                             <Add className="h-10 w-10 text-text-secondary/30 group-hover:text-text-secondary/50" />
                             <span className="text-text-secondary/50 text-sm group-hover:text-text-secondary">{t('tasks.addNewTasks')}</span>

@@ -78,18 +78,18 @@ export const TaskOptions = ({
                 left: isMobile ? `${buttonPosition.x - 60}px` : `${buttonPosition.x + 15}px`,
                 top: `${buttonPosition.y - 10}px`,
             }}
-            className="flex flex-col p-1 gap-1 bg-background rounded-lg 
+            className="form-panel flex flex-col p-1 gap-1 rounded-lg 
                 shadow-xl overflow-hidden z-50 border border-primary/30"
         >
             <button
                 onClick={() => setShowEditForm(true)}
-                className="p-2 text-text-primary hover:bg-primary/30 transition-colors rounded-md"
+                className="menu-icon-button p-2 text-text-primary transition-colors rounded-md"
             >
                 <Edit className="h-4 w-4" />
             </button>
             <button
                 onClick={() => setShowDeleteDialog(true)}
-                className="p-2 text-text-primary hover:bg-primary/30 transition-colors rounded-md"
+                className="menu-icon-button p-2 text-text-primary transition-colors rounded-md"
             >
                 <Delete className="h-4 w-4" />
             </button>
